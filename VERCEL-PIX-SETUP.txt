@@ -1,0 +1,13 @@
+CONFIGURAÇÃO DO PIX NA VERCEL — FLEVO PAY
+
+1. Vercel > Project > Settings > Environment Variables.
+2. Configure FLEVO_API_KEY com sua chave secreta da FlevoPay.
+3. FLEVO_API_BASE (opcional): https://app.flevopag.com/api/v1 — confirme o host no painel da sua conta.
+4. FLEVO_PRODUCT_HASH (opcional): hash do produto mostrado nos detalhes do produto na FlevoPay. Se não definido, a função envia source="api_externa", conforme a exceção mostrada na documentação enviada.
+5. Salve e faça redeploy.
+6. As funções serverless ficam em /api/pix e /api/status.
+7. Nunca exponha a chave no HTML/JavaScript nem em repositórios públicos.
+
+Baseado nas capturas fornecidas, a criação usa POST /api/v1/transaction; amount em centavos; description; reference; customer; e tracking opcional com utm_source, utm_medium, utm_campaign, utm_content, utm_term, src e sck.
+
+IMPORTANTE: as capturas não mostram o esquema completo de autenticação nem o formato da resposta/consulta de status. Portanto, a integração ainda precisa ser testada com credenciais reais para confirmar geração do QR Pix e atualização do pagamento. A Vercel não executa PHP nativamente; estas rotas JavaScript são as rotas para o fluxo Pix.

