@@ -6,4 +6,4 @@
  */
 
 define('FLEVO_API_BASE', 'https://app.flevopag.com/api/v1');
-define('FLEVO_API_KEY', 'COLE_SUA_NOVA_CHAVE_API_AQUI');
+define('FLEVO_API_KEY', 'sk_42511b43df7f36bba912cf115fd5ff1d45ed0d9bfa8c5de8032a282d9d98eb26');
